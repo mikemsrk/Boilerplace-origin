@@ -53,6 +53,33 @@
 
     });           
 
+    $('#updateScore').click(function() {
+
+      var threadId = parseInt($('#threadId').val());
+      var score = parseInt($('#score').val());
+
+      $('#threadId').val('');
+      $('#score').val(''); 
+
+      $.ajax({
+        type: 'POST',
+        url: 'http://127.0.0.1:8080/scoreForumThread',
+        data: JSON.stringify({"thread_id" : threadId, "score" : score}),
+        // contentType: "application/json",
+        // crossDomain: true,
+          success: function(data, textStatus, jqXHR) {
+            console.log(data);
+            // console.log('success');
+            //data - response from server
+          },
+          error: function (jqXHR, textStatus, errorThrown) {
+            console.log(errorThrown);
+          }
+      });
+
+    });
+ 
+
   });
 </script>
 <style type="text/css">
@@ -94,6 +121,12 @@ Body: <input type="text" id="body" name="body" placeholder="Body"><br>
 <br>
 
 <input id="getForumThread" type="submit" value="Get Forum Thread"><br>
+
+<br>
+
+Thread Id: <input type="text" id="threadId" name="threadId" placeholder="Thread Id"><br>
+Score: <input type="text" id="score" name="score" placeholder="Score"><br>
+<input id="updateScore" type="submit" value="Update Score"><br>
 
 <br>
 

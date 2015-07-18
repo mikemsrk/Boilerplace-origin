@@ -45,6 +45,8 @@ func main() {
   //serve static assets
   http.Handle("/", http.FileServer(http.Dir("../pub/build")))
 
+  //TODO: make urls more RESTful
+
   //routes in auth.go
 
   //allow user to sign up

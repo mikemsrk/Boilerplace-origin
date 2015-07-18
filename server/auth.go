@@ -13,6 +13,7 @@ import (
   _ "github.com/go-sql-driver/mysql"
   "golang.org/x/crypto/bcrypt"
   "github.com/gorilla/sessions"   
+  //"strconv"
 )
 
 
@@ -106,7 +107,7 @@ func createUserHandler (w http.ResponseWriter, r *http.Request, db *sql.DB) {
       if err != nil {
         http.Error(w, err.Error(), http.StatusInternalServerError)
       }
-      session.Values["id"] = lastId
+      session.Values["id"] = int(lastId)
       session.Values["username"] = username   
       session.AddFlash("This is a flashed message!", "message")
       session.Save(r, w) 

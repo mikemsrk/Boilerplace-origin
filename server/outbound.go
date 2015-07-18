@@ -53,6 +53,20 @@ type UserInfoOutbound struct {
   Avatar_link string `json:"avatar_link"`
 }
 
+//struct containing a forum thread's info
+type ForumThreadInfoOutbound struct {
+  Thread_id int `json:"thread_id"`
+  Creator_user_id int `json:"creator_user_id"`
+  Title string `json:"title"`
+  Body string `json:"body"`
+  Rating int `json:"rating"`
+  Creation_time string `json:"creation_time"`
+  Last_update_time string `json:"last_update_time"`
+}
 
+//struct containing an array of forum threads
+type ForumThreadCollectionOutbound struct {
+  ForumThreads []*ForumThreadInfoOutbound `json:"forumThreads"`
+}
 
 

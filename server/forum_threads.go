@@ -15,6 +15,8 @@ import (
 
 
 //TODO: handle panics/errors, as unhandled panics/errors will shut down the server
+//TODO: make a checkerr function
+//TODO: put duplicated code into functions
 
 
 //TODO: Return correct status and message if session is invalid
@@ -175,6 +177,75 @@ func getForumThread(w http.ResponseWriter, r *http.Request, db *sql.DB, store *s
   //return 200 status to indicate success
   fmt.Println("about to write 200 header")
   w.Write(jsonString)
+
+}
+
+
+//TODO: Return correct status and message if session is invalid
+//TODO: Return correct status and message if query failed
+func scoreForumThread(w http.ResponseWriter, r *http.Request, db *sql.DB, store *sessions.CookieStore) {
+
+  fmt.Println("Score forum thread...")
+
+  //add headers to response
+  w.Header()["access-control-allow-origin"] = []string{"http://localhost:8080"} //TODO: fix this?                                                           
+  w.Header()["access-control-allow-methods"] = []string{"GET, POST, OPTIONS"}
+  w.Header()["Content-Type"] = []string{"application/json"}
+
+  //ignore options requests
+  if r.Method == "OPTIONS" {
+    fmt.Println("options request received")
+    w.WriteHeader(http.StatusTemporaryRedirect)
+    return
+  }
+
+  //check for session to see if client is authenticated
+  session, err := store.Get(r, "flash-session")
+  if err != nil {
+    http.Error(w, err.Error(), http.StatusInternalServerError)
+  }
+  fm := session.Flashes("message")
+  if fm == nil {
+    fmt.Println("Trying to vote on forum thread as an invalid user")
+    fmt.Fprint(w, "No flash messages")
+    return
+  }
+  //session.Save(r, w)
+
+  //parse the body of the request into a string
+  body, err := ioutil.ReadAll(r.Body)
+  if err != nil {
+    panic(err)
+  }
+  //fmt.Println(string(body))
+  
+  //parse the JSON string body to get the thread to update and the score to update the thread with
+  byt := body
+  var dat map[string]interface{}
+  if err := json.Unmarshal(byt, &dat); err != nil {
+    panic(err)
+  }
+  score := int(dat["score"].(float64))
+  thread_id := int(dat["thread_id"].(float64))
+
+  //update the forum thread by the score
+  stmt, err := db.Prepare("update forum_threads set rating=rating+? where thread_id=?")
+  if err != nil {
+    log.Fatal(err)
+  }
+  res, err := stmt.Exec(score, thread_id)
+  if err != nil {
+    log.Fatal(err)
+  }
+  rowCnt, err := res.RowsAffected()
+  if err != nil {
+    log.Fatal(err)
+  }
+  fmt.Printf("Updated score of thread " + strconv.Itoa(thread_id) + ". Rows affected = %d\n", rowCnt)
+
+  //return 200 status to indicate success
+  fmt.Println("about to write 200 header")
+  w.WriteHeader(http.StatusOK)
 
 }
 

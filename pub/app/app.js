@@ -14,9 +14,6 @@ var RouteHandler = Router.RouteHandler;
 var Navigation = Router.Navigation;
 var Link = Router.Link;
 
-// var Store = require('../stores/Store.js');
-// var actions = require('../actions/actions.js');
-
 
 var App = React.createClass({
 
@@ -53,18 +50,6 @@ var routes = (
   </Route>
 );
 
-// TODO: Incorporate later.
-// var routes = (
-//   <Route path="/" handler={App}>
-//     <DefaultRoute path="main" handler={Main}/>
-//     <Route path="profile" handler={Profile}/>
-//     <Route path="login" handler={Login}/>
-//     <Route path="logout" handler={Logout}/>
-//     <Route path="signup" handler={Signup}/>
-//     <Route path="game" handler={Game} onEnter={requireAuth()}/>
-//     <Route path="vr" handler={Environment}/>
-//   </Route>
-// );
 
 Router.run(routes, Router.HashLocation, function(Root){
   React.render(<Root/>, document.getElementById('app'));

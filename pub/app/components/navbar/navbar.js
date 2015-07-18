@@ -17,7 +17,6 @@ var Navbar = React.createClass({
   componentWillMount: function(){
     // _onChange is cb function.
     AuthStore.addChangeListener(this._onChange);
-
   },
 
   componentWillUnmount: function(){

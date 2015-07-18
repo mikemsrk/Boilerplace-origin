@@ -97,11 +97,11 @@ var Auth = {
     var that = this;
     
     if (this.loggedIn()) {
-      if (callback) {
-        callback(true);
-      }
-      this.onChange(true);
-      return;
+      // if (callback) {
+      //   callback(true);
+      // }
+      // this.onChange(true);
+      // return;
     }
     createUser(username, password, firstname, lastname, function(res) {
         var authenticated = false;

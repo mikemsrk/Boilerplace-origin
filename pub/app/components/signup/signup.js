@@ -1,34 +1,44 @@
 var React = require('react');
 var SignupForm = require('./signup-form');
+var AuthActions = require('../../actions/AuthActions');
+var AuthStore = require('../../stores/AuthStore');
 
 var Signup = React.createClass({
   getInitialState: function(){
     return {
-      // error: false,
-      // loggedIn: Auth.loggedIn()
+      loggedIn: AuthStore.loggedIn(),
+      error: AuthStore.error()
     };
   },
-  handleSignupSubmit: function(user){
-    if(user.error){
-      this.handleError(user.error);
-      return;
-    }
-    // TODO: Move this to Auth Store
 
-    // var that = this;
-    // Auth.signup(user.username,user.password,user.firstname,user.lastname,function(authenticated){
-    //   if(authenticated){
-    //     // redirect to game
-    //     location.hash = '/';
-    //   }else{
-    //     // TODO: Display warning message - no go
-    //     return that.setState({ error: true });
-    //   }
-    // });
+  componentWillMount: function(){
+    AuthStore.addChangeListener(this._onChange);
   },
-  handleError: function(err){
-    return this.setState({ error: true });
+
+  componentWillUnmount: function(){
+    AuthStore.removeChangeListener(this._onChange);
   },
+
+  _onChange: function(){
+    this.setState({
+      loggedIn: AuthStore.loggedIn(),
+      error: AuthStore.error()
+    });
+    if(this.state.loggedIn){
+      location.hash = '/';
+    }
+  },
+
+  handleSignupSubmit: function(user){
+    AuthActions.signup({
+      firstname: user.firstname, 
+      lastname: user.lastname, 
+      username: user.username, 
+      password: user.password, 
+      error: user.error
+    });
+  },
+
   render: function() {
     return (
       <div className="Auth center-block">

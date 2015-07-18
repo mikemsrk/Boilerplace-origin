@@ -48,6 +48,22 @@ var AuthStore = assign({}, EventEmitter.prototype, {
     return Auth.loggedIn();
   },
 
+  signup: function(username,password,firstname,lastname){
+    var that = this;
+    _error = false;
+    Auth.signup(username, password, firstname, lastname, function(success) {
+
+      if(success){
+        _loggedIn = true;
+      }else{
+        _loggedIn = false;
+        _error = true;
+      }
+      that.emitChange();
+
+    });
+  },
+
   addChangeListener: function(cb) {
     this.on(CHANGE_EVENT, cb)
   },
@@ -63,6 +79,7 @@ AppDispatcher.register(function(payload){
 
   switch(action.actionType){
     case AuthConstants.SIGNUP:
+      AuthStore.signup(action.data.username,action.data.password,action.data.firstname,action.data.lastname);
       AuthStore.emitChange();
       break;
     case AuthConstants.LOGIN:

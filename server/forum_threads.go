@@ -10,6 +10,7 @@ import (
   _ "github.com/go-sql-driver/mysql"
   "github.com/gorilla/sessions"  
   "strconv"  
+  "time"
 )
 
 
@@ -134,13 +135,13 @@ func getForumThread(w http.ResponseWriter, r *http.Request, db *sql.DB, store *s
     queried_title string
     queried_body string
     queried_rating int
-    queried_creation_time string
-    queried_last_update_time string
+    queried_creation_time time.Time
+    queried_last_update_time time.Time
   )
 
   //find all threads created by the user
-  //rows, err := db.Query("select * from forum_threads where creator_user_id = ?", userid)
-  rows, err := db.Query("select thread_id, creator_user_id, title, body, rating from forum_threads where creator_user_id = ?", userid)
+  //thread_id, creator_user_id, title, body, rating, creation_time, last_update_time
+  rows, err := db.Query("select * from forum_threads where creator_user_id = ?", userid)
   if err != nil {
     panic(err)
   }
@@ -151,8 +152,7 @@ func getForumThread(w http.ResponseWriter, r *http.Request, db *sql.DB, store *s
   //iterate through results of query
   for rows.Next() {
     //get the relevant information from the query results
-    //err = rows.Scan(&queried_thread_id, &queried_creator_user_id, &queried_title, &queried_body, &queried_rating, &queried_creation_time, &queried_last_update_time)
-    err = rows.Scan(&queried_thread_id, &queried_creator_user_id, &queried_title, &queried_body, &queried_rating)
+    err = rows.Scan(&queried_thread_id, &queried_creator_user_id, &queried_title, &queried_body, &queried_rating, &queried_creation_time, &queried_last_update_time)
     if err != nil {
       panic(err)
     }

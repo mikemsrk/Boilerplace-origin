@@ -78,15 +78,15 @@ func main() {
   http.HandleFunc("/getForumThread", func(w http.ResponseWriter, r *http.Request) {
     getForumThread(w, r, db, store)
   })
-/*
-  //upvote forum thread
-  http.HandleFunc("/upvoteForumThread", func(w http.ResponseWriter, r *http.Request) {
-    loginHandler(w, r, db, store)
-  })      
 
+  //score forum thread
+  http.HandleFunc("/scoreForumThread", func(w http.ResponseWriter, r *http.Request) {
+    scoreForumThread(w, r, db, store)
+  })      
+/*
   //downvote forum thread
   http.HandleFunc("/downvoteForumThread", func(w http.ResponseWriter, r *http.Request) {
-    loginHandler(w, r, db, store)
+    dow(w, r, db, store)
   })
 */
 
@@ -110,7 +110,7 @@ func main() {
 
 //function to open connection with database
 func initializeDB() *sql.DB {
-  db, err := sql.Open("mysql",  DB_USER + ":" + DB_PASSWORD + "@/" + DB_NAME)
+  db, err := sql.Open("mysql",  DB_USER + ":" + DB_PASSWORD + "@/" + DB_NAME + "?parseTime=true")
   if err != nil {
     panic(err)
   } 

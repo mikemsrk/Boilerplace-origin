@@ -28,8 +28,8 @@ var Bio = React.createClass({
   },
 
   saveEdit: function(){
-    var avatar = $('.profile #avatarLink').val();
-    var bio = $('.profile #bioEdit').val();
+    var avatar = React.findDOMNode(this.refs.avatar).value.trim();
+    var bio = React.findDOMNode(this.refs.bio).value.trim();
 
     var data = this.props.item;
     data.avatar_link = avatar;
@@ -52,7 +52,7 @@ var Bio = React.createClass({
         {!this.state.editing ? (
           <img src={this.props.item.avatar_link} className="img-thumbnail"></img>
         ) : (
-          <p>Avatar Link: <input type="text" id="avatarLink"></input></p>
+          <p>Avatar Link: <input type="text" ref="avatar"></input></p>
         )}
 
         <p>Rep: {this.props.item.rep}</p>
@@ -61,7 +61,7 @@ var Bio = React.createClass({
         {!this.state.editing ? (
           <p>Bio: {this.props.item.bio}</p>
         ) : (
-          <p>Bio: <input type="text" id="bioEdit"></input></p>
+          <p>Bio: <input type="text" ref="bio"></input></p>
         )}
         
         {!this.state.editing ? (

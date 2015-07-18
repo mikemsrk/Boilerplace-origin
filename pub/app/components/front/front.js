@@ -1,16 +1,10 @@
 var React = require('react');
 var Front = React.createClass({
-  // TODO: Incorporate Later when Auth is in.
 
-  // getInitialState: function(){
-  //   if(!Auth.loggedIn()){
-  //     location.hash = '/login';
-  //   }
-  //   return {
-  //     error: false,
-  //     loggedIn: Auth.loggedIn()
-  //   };
-  // },
+  getInitialState: function(){
+    return {
+    };
+  },
   render: function() {
     return (
       <div className="profile">

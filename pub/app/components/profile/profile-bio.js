@@ -13,7 +13,7 @@ var Bio = React.createClass({
       <div className="col-md-3"> 
         <h3> Profile </h3>
         <h3>Jason Statham</h3>
-        <img src=""className="img-responsive img-circle"></img>
+          <img src=""className="img-responsive img-circle"></img>
         <p>I enjoy really bad movies.</p>
       </div>
     );

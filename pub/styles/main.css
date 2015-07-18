@@ -12,6 +12,10 @@ body{
   height:200px;
 }
 
+.profile p{
+  color:black;
+}
+
 .navbar input{
   width:150px;
   display:inline-block;

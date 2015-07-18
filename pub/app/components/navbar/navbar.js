@@ -10,26 +10,28 @@ var Navbar = React.createClass({
 
   getInitialState: function(){
     return {
-      // loggedIn: Auth.loggedIn()
+      loggedIn: AuthStore.loggedIn()
     };
-  },
-  setStateOnAuth: function(loggedIn){
-    this.setState({
-      loggedIn: loggedIn
-    });
   },
 
   componentWillMount: function(){
-    // Auth.onChange = this.setStateOnAuth;
+    // _onChange is cb function.
+    AuthStore.addChangeListener(this._onChange);
+
+  },
+
+  componentWillUnmount: function(){
+    AuthStore.removeChangeListener(this._onChange);
+  },
+
+  _onChange: function(){
+    this.setState({
+      loggedIn: AuthStore.loggedIn()
+    });
   },
 
   navlogout: function(){
-    Auth.logout(function(){
-      location.hash = '/login';
-    });
-    this.setState({
-      loggedIn: false
-    });
+    AuthActions.logout();
   },
 
   handleSubmit: function(e){

@@ -43,7 +43,7 @@ func main() {
   go room.run()
 
   //serve static assets
-  http.Handle("/", http.FileServer(http.Dir("../pub")))
+  http.Handle("/", http.FileServer(http.Dir("../pub/build")))
 
   //allow user to sign up
   http.HandleFunc("/createUser", func(w http.ResponseWriter, r *http.Request) {

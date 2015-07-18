@@ -1,37 +1,45 @@
 var React = require('react');
 var LoginForm = require('./login-form');
+var AuthActions = require('../../actions/AuthActions');
+var AuthStore = require('../../stores/AuthStore');
 
 var Login = React.createClass({
   getInitialState: function(){
-    // if(Auth.loggedIn()){
-    //   location.hash = '/game';
-    // }
     return {
-      // error: false,
-      // loggedIn: Auth.loggedIn()
+      loggedIn: AuthStore.loggedIn(),
+      error: AuthStore.error()
     };
   },
-  handleLoginSubmit: function(user){
 
-    // TODO: Move this to Auth store
-
-    // var that = this;
-    // Auth.login(user.username,user.password,function(authenticated){
-    //   if(authenticated){
-    //     // TODO: redirect to game
-    //     location.hash = '/';
-    //   }else{
-    //     // TODO: Display warning message - no go
-    //     return that.setState({ error: true });
-    //   }
-    // });
+  componentWillMount: function(){
+    AuthStore.addChangeListener(this._onChange);
   },
+
+  componentWillUnmount: function(){
+    AuthStore.removeChangeListener(this._onChange);
+  },
+
+  _onChange: function(){
+    this.setState({
+      loggedIn: AuthStore.loggedIn(),
+      error: AuthStore.error()
+    });
+  },
+
+  handleLoginSubmit: function(user){
+    AuthActions.login({username:user.username,pass:user.password});
+  },
+
   render: function() {
     return (
       <div className="Auth center-block">
         <h2>Login</h2>
-          <LoginForm onLoginSubmit={this.handleLoginSubmit}/>
-          {this.state.error && (<p className="error">Bad login information</p>)}
+        {this.state.loggedIn ? (
+            <p> You are already logged in </p>
+          ) : (
+            <LoginForm onLoginSubmit={this.handleLoginSubmit}/>
+          )}
+        {this.state.error && (<p className="error">Bad login information</p>)}
       </div>
     );
   }

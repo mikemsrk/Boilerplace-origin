@@ -116,9 +116,11 @@ var Auth = {
         that.onChange(authenticated);
     });
   },
+
   getToken: function() {
     return localStorage.token;
   },
+
   logout: function(callback) {
     delete localStorage.token;
     deleteAllCookies();
@@ -139,9 +141,11 @@ var Auth = {
     }
     this.onChange(false);
   },
+
   loggedIn: function() {
     return !!localStorage.token;
   },
+
   onChange: function() {}
 };
 

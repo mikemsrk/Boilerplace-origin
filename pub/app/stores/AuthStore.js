@@ -7,7 +7,8 @@ var assign = require('object-assign');
 var CHANGE_EVENT = 'change';
 
 var _user = null;
-var _loggedIn = false;
+var _loggedIn = null;
+var _error = null;
 
 var AuthStore = assign({}, EventEmitter.prototype, {
 
@@ -15,20 +16,36 @@ var AuthStore = assign({}, EventEmitter.prototype, {
      this.emit(CHANGE_EVENT);
    },
 
+  error: function(){
+    return _error;
+  },
+
   login: function(username,pass){
-    Auth.login(username,pass,function(){
-      //TODO: redirect to /
+    var that = this;
+    _error = false;
+    Auth.login(username,pass,function(success){
+
+      if(success){
+        _loggedIn = true;
+      }else{
+        _loggedIn = false;
+        _error = true;
+      }
+      that.emitChange();
+
     });
   },
   // log out user
   logout: function() {
+    var that = this;
     Auth.logout(function(){
-      //TODO: redirect to /logout
+      _loggedIn = false;
+      that.emitChange();
     });
   },
 
-  isLoggedIn: function() {
-    return !!_loggedIn;
+  loggedIn: function() {
+    return Auth.loggedIn();
   },
 
   addChangeListener: function(cb) {
@@ -46,15 +63,9 @@ AppDispatcher.register(function(payload){
 
   switch(action.actionType){
     case AuthConstants.SIGNUP:
-      // _user = action.data;
-      // _loggedIn = action.loggedIn;
-      // redirect();
       AuthStore.emitChange();
       break;
     case AuthConstants.LOGIN:
-      // _user = action.data;
-      // _loggedIn = action.loggedIn;
-      // redirect();
       AuthStore.login(action.data.username,action.data.pass);
       AuthStore.emitChange();
       break;

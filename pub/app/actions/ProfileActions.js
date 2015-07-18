@@ -2,10 +2,9 @@ var AppDispatcher = require('../dispatchers/AppDispatcher');
 var ProfileConstants = require('../constants/ProfileConstants');
 
 var ProfileActions = {
-  fetch: function(data){
+  fetch: function(){
     AppDispatcher.handleAction({
-      actionType: ProfileConstants.FETCH,
-      data: data
+      actionType: ProfileConstants.FETCH
     });
   },
   update: function(data){

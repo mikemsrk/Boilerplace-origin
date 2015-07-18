@@ -7,10 +7,13 @@ var assign = require('object-assign');
 var CHANGE_EVENT = 'change';
 
 var _store = {
-  avatar: '',
-  firstname: '',
-  lastname: '',
-  blurb: ''
+  avatar_link: "",
+  bio: "",
+  first_name: "",
+  last_name: "",
+  user_name: "",
+  id: 0,
+  rep: 0
 };
 
 var ProfileStore = assign({}, EventEmitter.prototype, {
@@ -19,18 +22,24 @@ var ProfileStore = assign({}, EventEmitter.prototype, {
      this.emit(CHANGE_EVENT);
    },
 
-  error: function(){
-    return _error;
+  getBio: function(){
+    return _store;
   },
 
   fetch: function(){
-
-
+    var that = this;
+    Profile.fetch(function(data){
+      _store = data;
+      that.emitChange();
+    });
   },
 
-  update: function(){
-
-
+  update: function(bio,avatar){
+    var that = this;
+    Profile.update(bio,avatar,function(data){
+      console.log('update successful');
+      that.fetch();
+    });
   },
 
   delete: function(){
@@ -57,7 +66,7 @@ AppDispatcher.register(function(payload){
       ProfileStore.emitChange();
       break;
     case ProfileConstants.UPDATE:
-      ProfileStore.update();
+      ProfileStore.update(action.data.bio,action.data.avatar_link);
       ProfileStore.emitChange();
       break;
     case ProfileStore.DELETE:

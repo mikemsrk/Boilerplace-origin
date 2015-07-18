@@ -12,6 +12,7 @@ var LoginForm = React.createClass({
     }
     // Send request back up to Login
     this.props.onLoginSubmit({username: username, password: password});
+    
     React.findDOMNode(this.refs.username).value = '';
     React.findDOMNode(this.refs.password).value = '';
     return;

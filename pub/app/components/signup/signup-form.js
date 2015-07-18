@@ -16,8 +16,9 @@ var SignupForm = React.createClass({
     if(passconf !== password){
       error = true;
     }
-    // TODO: send request to server
+    // Bubble this up to parent
     this.props.onSignupSubmit({firstname: firstname, lastname: lastname, username: username, password: password, error: error});
+    
     React.findDOMNode(this.refs.firstname).value = '';
     React.findDOMNode(this.refs.lastname).value = '';
     React.findDOMNode(this.refs.username).value = '';

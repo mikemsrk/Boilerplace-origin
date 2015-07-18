@@ -84,7 +84,6 @@ var Auth = {
         var authenticated = false;
         if (res.authenticated) {
           console.log('login successful');
-          localStorage.token = res.token;
           authenticated = true;
         }
         if (callback) {
@@ -107,7 +106,6 @@ var Auth = {
         var authenticated = false;
         if (res.authenticated) {
           console.log('signup and login successful!');
-          localStorage.token = res.token;
           authenticated = true;
         }
         if (callback) {
@@ -117,12 +115,7 @@ var Auth = {
     });
   },
 
-  getToken: function() {
-    return localStorage.token;
-  },
-
   logout: function(callback) {
-    delete localStorage.token;
     deleteAllCookies();
 
     function deleteAllCookies() {
@@ -143,7 +136,17 @@ var Auth = {
   },
 
   loggedIn: function() {
-    return !!localStorage.token;
+    // check the flash session cookie
+    var good = false;
+    var cookies = document.cookie.split(";");
+
+    for (var i = 0; i < cookies.length; i++) {
+      var cookie = cookies[i];
+      var eqPos = cookie.indexOf("flash-session=");
+      if(eqPos > -1) good = true;
+    }
+
+    return good;
   },
 
   onChange: function() {}

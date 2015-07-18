@@ -27,6 +27,9 @@ var Navbar = React.createClass({
     this.setState({
       loggedIn: AuthStore.loggedIn()
     });
+    if(this.state.loggedIn){
+      location.hash = '/';
+    }
   },
 
   navlogout: function(){

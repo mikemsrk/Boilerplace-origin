@@ -24,6 +24,9 @@ var Login = React.createClass({
       loggedIn: AuthStore.loggedIn(),
       error: AuthStore.error()
     });
+    if(this.state.loggedIn){
+      location.hash = '/';
+    }
   },
 
   handleLoginSubmit: function(user){

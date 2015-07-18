@@ -19,7 +19,7 @@ CREATE TABLE users (
   UNIQUE KEY (user_name)
 );
 
-CREATE TABLE user_threads (
+CREATE TABLE forum_threads (
   thread_id INT(10) NOT NULL auto_increment,
   creator_user_id INT(10),
   title VARCHAR(50) DEFAULT '',

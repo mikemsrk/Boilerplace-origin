@@ -45,6 +45,8 @@ func main() {
   //serve static assets
   http.Handle("/", http.FileServer(http.Dir("../pub/build")))
 
+  //routes in auth.go
+
   //allow user to sign up
   http.HandleFunc("/createUser", func(w http.ResponseWriter, r *http.Request) {
     createUserHandler(w, r, db)
@@ -65,11 +67,38 @@ func main() {
     loginHandler(w, r, db, store)
   })
 
+  //routes in forum_threads.go
+
+  //create forum thread
+  http.HandleFunc("/createForumThread", func(w http.ResponseWriter, r *http.Request) {
+    createForumThread(w, r, db, store)
+  })
+
+  //get forum thread
+  http.HandleFunc("/getForumThread", func(w http.ResponseWriter, r *http.Request) {
+    getForumThread(w, r, db, store)
+  })
+/*
+  //upvote forum thread
+  http.HandleFunc("/upvoteForumThread", func(w http.ResponseWriter, r *http.Request) {
+    loginHandler(w, r, db, store)
+  })      
+
+  //downvote forum thread
+  http.HandleFunc("/downvoteForumThread", func(w http.ResponseWriter, r *http.Request) {
+    loginHandler(w, r, db, store)
+  })
+*/
+
+  //routes for sockets
+
   //listen for player connection
   http.HandleFunc("/connect", func(w http.ResponseWriter, r *http.Request) {
     fmt.Println("trying to connect websocket")
     connect(w, r, room, store)
   })
+
+
 
   //listen on specified port
   fmt.Println("Server starting")

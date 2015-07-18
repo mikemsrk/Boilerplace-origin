@@ -26,7 +26,7 @@ CREATE TABLE forum_threads (
   body TEXT,
   rating INT(10) DEFAULT 0,
   creation_time DATETIME DEFAULT CURRENT_TIMESTAMP,
-  last_update_time DATETIME ON UPDATE CURRENT_TIMESTAMP,
+  last_update_time DATETIME ON UPDATE CURRENT_TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
   PRIMARY KEY (thread_id),
   FOREIGN KEY (creator_user_id) REFERENCES users(id)

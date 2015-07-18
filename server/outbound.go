@@ -1,5 +1,9 @@
 package main
 
+import (
+  "time"
+)
+
 
 //structs to be json stringified and sent as outbound messages to the client(s)
 
@@ -60,8 +64,8 @@ type ForumThreadInfoOutbound struct {
   Title string `json:"title"`
   Body string `json:"body"`
   Rating int `json:"rating"`
-  Creation_time string `json:"creation_time"`
-  Last_update_time string `json:"last_update_time"`
+  Creation_time time.Time `json:"creation_time"`
+  Last_update_time time.Time `json:"last_update_time"`
 }
 
 //struct containing an array of forum threads

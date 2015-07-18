@@ -43,12 +43,22 @@ func main() {
   go room.run()
 
   //serve static assets
-  http.Handle("/", http.FileServer(http.Dir("../pub/build")))
+  http.Handle("/", http.FileServer(http.Dir("../pub")))
 
   //allow user to sign up
   http.HandleFunc("/createUser", func(w http.ResponseWriter, r *http.Request) {
     createUserHandler(w, r, db)
   })    
+
+  //update user info
+  http.HandleFunc("/updateUserInfo", func(w http.ResponseWriter, r *http.Request) {
+    updateUserInfoHandler(w, r, db, store)
+  })
+
+  //get user info
+  http.HandleFunc("/getUserInfo", func(w http.ResponseWriter, r *http.Request) {
+    getUserInfoHandler(w, r, db, store)
+  })
 
   //authenticate user
   http.HandleFunc("/authenticate", func(w http.ResponseWriter, r *http.Request) {
@@ -95,7 +105,7 @@ func connect(w http.ResponseWriter, r *http.Request, room *GameRoom, store *sess
     fmt.Fprint(w, "No flash messages")
     return
   }
-  session.Save(r, w)
+  //session.Save(r, w)
 
   fmt.Println("New user connected")
 

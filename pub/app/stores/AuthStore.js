@@ -16,7 +16,6 @@ var AuthStore = assign({}, EventEmitter.prototype, {
    },
 
   login: function(username,pass){
-    console.log(username,pass);
     Auth.login(username,pass,function(){
       //TODO: redirect to /
     });
@@ -44,7 +43,7 @@ var AuthStore = assign({}, EventEmitter.prototype, {
 
 AppDispatcher.register(function(payload){
   var action = payload.action;
- console.log('default dispatcherrrrrr');
+
   switch(action.actionType){
     case AuthConstants.SIGNUP:
       // _user = action.data;
@@ -56,7 +55,6 @@ AppDispatcher.register(function(payload){
       // _user = action.data;
       // _loggedIn = action.loggedIn;
       // redirect();
-      console.log('login event');
       AuthStore.login(action.data.username,action.data.pass);
       AuthStore.emitChange();
       break;

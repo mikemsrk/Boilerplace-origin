@@ -73,12 +73,12 @@ var Auth = {
     var that = this;
 
     if (this.loggedIn()) {
-      console.log('already logged in');
-      if (callback) {
-        callback(true);
-      }
-      this.onChange(true);
-      return;
+      // console.log('already logged in');
+      // if (callback) {
+      //   callback(true);
+      // }
+      // this.onChange(true);
+      // return;
     }
     authenticateUser(username, pass, (function(res) {
         var authenticated = false;

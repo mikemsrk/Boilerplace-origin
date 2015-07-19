@@ -95,9 +95,10 @@ func createForumThread(w http.ResponseWriter, r *http.Request, db *sql.DB, store
   w.Write([]byte("{\"thread_id\" : " + strconv.FormatInt(lastId, 10) + "}"))
 }
 
+//option: 0 - by user id, 1 - by rating, 2 - by datetime
 //TODO: Return correct status and message if session is invalid
 //TODO: Return correct status and message if query failed
-func getForumThread(w http.ResponseWriter, r *http.Request, db *sql.DB, store *sessions.CookieStore) {
+func getForumThread(w http.ResponseWriter, r *http.Request, db *sql.DB, store *sessions.CookieStore, option int) {
 
   fmt.Println("Getting forum thread...")
 
@@ -126,9 +127,24 @@ func getForumThread(w http.ResponseWriter, r *http.Request, db *sql.DB, store *s
   }
   //session.Save(r, w)
 
-  //get the user id and username from the cookie
-  userid := session.Values["id"].(int)
-  //username := session.Values["username"].(string)
+  //parse the body of the request into a string
+  body, err := ioutil.ReadAll(r.Body)
+  if err != nil {
+    panic(err)
+  }
+  //fmt.Println(string(body))
+  
+  //parse the JSON string body to get the page number
+  byt := body
+  var dat map[string]interface{}
+  if err := json.Unmarshal(byt, &dat); err != nil {
+    panic(err)
+  }
+  page_number := int(dat["page_number"].(float64))
+
+  //only get 25 threads per query, and get records based on page number
+  limit := 25
+  offset := (page_number - 1) * limit
 
   //variable(s) to hold the returned values from the query
   var (
@@ -141,12 +157,25 @@ func getForumThread(w http.ResponseWriter, r *http.Request, db *sql.DB, store *s
     queried_last_update_time time.Time
   )
 
-  //find all threads created by the user
-  //thread_id, creator_user_id, title, body, rating, creation_time, last_update_time
-  rows, err := db.Query("select * from forum_threads where creator_user_id = ?", userid)
+  //change query based on option
+  var dbQuery string 
+  if option == 0 { //find forum threads created by the user
+    //get the user from the cookie
+    userid := session.Values["id"].(int)
+
+    //thread_id, creator_user_id, title, body, rating, creation_time, last_update_time
+    dbQuery = "select * from forum_threads where creator_user_id = " + strconv.Itoa(userid) + " limit " + strconv.Itoa(limit) + " offset " + strconv.Itoa(offset)
+  } else if option == 1 { //find the most popular forum threads
+    dbQuery = "select * from forum_threads order by rating desc limit " + strconv.Itoa(limit) + " offset " + strconv.Itoa(offset)
+  } else { //find the most recent forum threads
+    dbQuery = "select * from forum_threads order by creation_time desc limit " + strconv.Itoa(limit) + " offset " + strconv.Itoa(offset)
+  }
+
+  //perform query and check for errors
+  rows, err := db.Query(dbQuery)
   if err != nil {
     panic(err)
-  }
+  } 
 
   //outbound object containing a collection of outbound objects for each forum thread
   forumThreadCollectionOutbound := ForumThreadCollectionOutbound{ForumThreads: make([]*ForumThreadInfoOutbound, 0)}

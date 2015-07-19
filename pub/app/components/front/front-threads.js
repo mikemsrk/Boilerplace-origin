@@ -39,9 +39,12 @@ var Threads = React.createClass({
           <table className="table">
             <thead>
               <tr>
+                <th>Rating</th>
                 <th>Title</th>
                 <th>Body</th>
-                <th>Rating</th>
+                <th>Submitted</th>
+                <th>Created</th>
+                <th>Updated</th>
               </tr>
             </thead>
 

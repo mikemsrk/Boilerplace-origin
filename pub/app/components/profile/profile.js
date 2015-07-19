@@ -19,8 +19,7 @@ var Profile = React.createClass({
       last_name: "",
       user_name: "",
       id: 0,
-      rep: 0,
-      threads: []
+      rep: 0
     };
   },
 

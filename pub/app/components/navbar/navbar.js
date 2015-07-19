@@ -100,8 +100,11 @@ var Navbar = React.createClass({
                 <li><a href="#">One more separated link</a></li>
               </ul>
             </li>
-
-            <li><Link to="/signup">Register</Link></li>
+            {this.state.loggedIn ? (
+              null
+            ) : (
+              <li><Link to="/signup">Register</Link></li>
+            )}
 
             {this.state.loggedIn ? (
               <li><Link to="/profile">Profile</Link></li>

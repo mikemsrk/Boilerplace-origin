@@ -53,7 +53,7 @@ body{
   min-width:300px;
   overflow:auto;
 }
-.Auth h2,p{
+.Auth h2,.Auth p{
   color:white;
 }
 .Auth input{
@@ -82,39 +82,14 @@ body{
   width:48%;
 }
 
-.textForm{
-  width:300px;
-  height:40px;
-  text-align:center;
-  font-size:30px;
+.newThread form{
+  width:40%;
 }
 
-div .textDisplay{
-  font-size:60px;
-  font-family:'century gothic';
-  word-wrap: break-word;
-  background-color:lightblue;
-  width:1000px;
-  height:1000px;
-  padding:100px;
-  border-radius:20px;
-}
-
-div .chatBox{
-  width:400px;
+.newThread input[type="textarea"]{
   height:200px;
-  font-family:'century gothic';
-  word-wrap: break-word;
-  background-color:lightblue;
-  padding:10px;
-  border-radius:20px;
 }
 
-.chatBox p{
-  margin:0;
-}
-
-.textDisplay p{
-  margin:0;
-  padding:0;
+.newThread input, .newThread button{
+  margin:10px;
 }

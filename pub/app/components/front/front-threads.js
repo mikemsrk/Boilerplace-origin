@@ -30,11 +30,21 @@ var Threads = React.createClass({
     console.log(this.state.threads);
   },
 
+  upVote: function(id){
+    // TODO: call thread action to upvote
+    ThreadActions.vote({thread_id:id,score:1});
+  },
+
+  downVote: function(id){
+    // TODO: call thread action to downvote
+    ThreadActions.vote({thread_id:id,score:-1});
+  },
+
   render: function() {
     return (
       <div className="threads">
         
-          <h3>Threads </h3>
+          <h3>Front Page</h3>
           <table className="table">
             <thead>
               <tr>
@@ -48,11 +58,13 @@ var Threads = React.createClass({
             </thead>
 
             <tbody>
-              {this.state.threads.map(function(item){
-                return (
-                  <ThreadItem key={item.thread_id} item={item}/>
-                );
-              })}
+              {
+                this.state.threads.map(function(item){
+                  return (
+                    <ThreadItem ref="thread" onUpVote={this.upVote} onDownVote={this.downVote} key={item.thread_id} item={item}/>
+                  );
+                },this)
+              }
             </tbody>
 
           </table>

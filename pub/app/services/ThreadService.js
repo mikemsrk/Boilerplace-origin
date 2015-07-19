@@ -109,6 +109,27 @@ var updateThread = function(bio,avatar,callback) {
   });
 };
 
+var vote = function(thread_id, score, callback) {
+  
+  $.ajax({
+    type: 'POST',
+    url: '/scoreForumThread',
+    data: JSON.stringify({"thread_id" : thread_id, "score" : score}),
+    crossDomain: true,
+    success: function(resp) { // WORKING for fetchuser?
+      // console.log('success',resp);
+      callback(resp);
+    },
+    error: function(resp) {
+      // TODO: Fix this, this always goes to error - not sure.
+      // Found out - jQuery 1.4.2 works with current go server, but breaks with newer ver.
+      console.log('error',resp);
+      callback(null);
+    }
+  });
+
+};
+
 var Thread = {
   fetchOne: function(callback) {
     var that = this;
@@ -132,7 +153,7 @@ var Thread = {
 
   fetchUserPage: function(page,callback) {
     var that = this;
-    fetchPage(page,function(res) {
+    fetchUserPage(page,function(res) {
         if (callback) {
           callback(res);
         }
@@ -167,6 +188,18 @@ var Thread = {
       callback();
     }
     this.onChange(false);
+  },
+
+  vote: function(thread_id,score,callback){
+    var that = this;
+
+    vote(thread_id, score, function(res) {
+      if (callback) {
+        callback(res);
+      }
+      that.onChange(res);
+    });
+
   },
 
   onChange: function() {}

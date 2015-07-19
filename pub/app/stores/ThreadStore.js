@@ -64,6 +64,13 @@ var ThreadStore = assign({}, EventEmitter.prototype, {
 
   },
 
+  vote: function(thread_id,score){
+    var that = this;
+    Thread.vote(thread_id,score,function(data){
+      that.emitChange();
+    });
+  },
+
   addChangeListener: function(cb) {
     this.on(CHANGE_EVENT, cb)
   },
@@ -93,12 +100,16 @@ AppDispatcher.register(function(payload){
     case ThreadConstants.ADD:
       ThreadStore.add(action.data.title,action.data.body);
       break;
-    case ThreadStore.UPDATE:
+    case ThreadConstants.UPDATE:
       // ThreadStore.delete();
       break;
-    case ThreadStore.DELETE:
+    case ThreadConstants.DELETE:
       // ThreadStore.delete();
       break;
+    case ThreadConstants.VOTE:
+      ThreadStore.vote(action.data.thread_id,action.data.score);
+      break;
+
     default:
       return true;
   }

@@ -30,6 +30,14 @@ var ThreadActions = {
       data: data
     });
   },
+
+  vote: function(data){
+    AppDispatcher.handleAction({
+      actionType: ThreadConstants.VOTE,
+      data: data
+    });
+  }
+
 };
 
 module.exports = ThreadActions;

@@ -93,3 +93,11 @@ body{
 .newThread input, .newThread button{
   margin:10px;
 }
+
+.glyphicon-chevron-down{
+  color:red;
+}
+
+.glyphicon-chevron-up{
+  color:green;
+}

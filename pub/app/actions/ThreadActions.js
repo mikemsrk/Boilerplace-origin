@@ -15,6 +15,14 @@ var ThreadActions = {
       data: data
     });
   },
+
+  fetchUserPage: function(data){
+    AppDispatcher.handleAction({
+      actionType: ThreadConstants.FETCHUSERPAGE,
+      data: data
+    });
+  },
+
   // Fetches one thread only
   fetchOne: function(data){
     AppDispatcher.handleAction({

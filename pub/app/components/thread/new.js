@@ -22,6 +22,10 @@ var NewThread = React.createClass({
     var title = React.findDOMNode(this.refs.title).value.trim();
     var body = React.findDOMNode(this.refs.body).value.trim();
 
+    if(!title || !body){
+      return;
+    }
+
     ThreadActions.add({
       title: title,
       body: body
@@ -30,7 +34,7 @@ var NewThread = React.createClass({
   },
 
   _onChange: function(){
-
+    location.hash = '/';
   },
 
 

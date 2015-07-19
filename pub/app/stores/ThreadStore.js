@@ -31,8 +31,10 @@ var ThreadStore = assign({}, EventEmitter.prototype, {
   },
 
   add: function(title,body){
-    Thread.add(title,body,function(data){});
-
+    var that = this;
+    Thread.add(title,body,function(data){
+      that.emitChange();
+    });
   },
 
   update: function(bio,avatar){

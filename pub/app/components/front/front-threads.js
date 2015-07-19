@@ -3,7 +3,6 @@ var ThreadStore = require('../../stores/ThreadStore');
 var ThreadActions = require('../../actions/ThreadActions');
 var ThreadItem = require('./front-threaditem');
 
-
 // Front page threads
 // Fetch threads by rating by page
 

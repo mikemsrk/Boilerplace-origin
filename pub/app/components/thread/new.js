@@ -1,9 +1,13 @@
 var React = require('react');
 var ThreadStore = require('../../stores/ThreadStore');
 var ThreadActions = require('../../actions/ThreadActions');
+var AuthStore = require('../../stores/AuthStore');
 
 var NewThread = React.createClass({
   getInitialState: function(){
+    if(!AuthStore.loggedIn()){
+      location.hash = '/login';
+    }
     return {
       success: false
     };

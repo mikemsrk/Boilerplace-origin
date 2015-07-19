@@ -70,7 +70,6 @@ AppDispatcher.register(function(payload){
       break;
     case ThreadConstants.ADD:
       ThreadStore.add(action.data.title,action.data.body);
-      ThreadStore.emitChange();
       break;
     case ThreadStore.UPDATE:
       // ThreadStore.delete();

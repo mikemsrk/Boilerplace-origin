@@ -1,6 +1,8 @@
 var ThreadConstants = {
   ADD: 'ADD',
-  FETCH: 'FETCH',
+  FETCHONE: 'FETCHONE',
+  FETCHPAGE: 'FETCHPAGE',
+  FETCHUSER: 'FETCHUSER',
   UPDATE: 'UPDATE',
   DELETE: 'DELETE'
 };

@@ -6,11 +6,8 @@ var assign = require('object-assign');
 
 var CHANGE_EVENT = 'change';
 
-var _store = {
-  title: "",
-  body: "",
-  rating: 0
-};
+var _threads = [];
+var _thread = null;
 
 var ThreadStore = assign({}, EventEmitter.prototype, {
 
@@ -19,13 +16,17 @@ var ThreadStore = assign({}, EventEmitter.prototype, {
    },
 
   getThread: function(){
-    return _store;
+    return _thread;
   },
 
-  fetch: function(){
+  getThreads: function(){
+    return _threads;
+  },
+
+  fetchPage: function(page){
     var that = this;
-    Thread.fetch(function(data){
-      _store = data;
+    Thread.fetchPage(page, function(data){
+      _threads = data;
       that.emitChange();
     });
   },
@@ -64,8 +65,12 @@ AppDispatcher.register(function(payload){
   var action = payload.action;
 
   switch(action.actionType){
-    case ThreadConstants.FETCH:
-      // ThreadStore.fetch(action.data.id);
+    case ThreadConstants.FETCHPAGE:
+      ThreadStore.fetchPage(action.data.page);
+      ThreadStore.emitChange();
+      break;
+    case ThreadConstants.FETCHONE:
+      // ThreadStore.fetch(action.data.page);
       ThreadStore.emitChange();
       break;
     case ThreadConstants.ADD:

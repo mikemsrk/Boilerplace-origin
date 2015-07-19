@@ -24,10 +24,31 @@ var addThread = function(title,body,callback) {
   });
 };
 
-var fetchThread = function(callback) {
+var fetchOne = function(callback) {
   $.ajax({
     type: 'GET',
     url: '/getUserInfo',
+    crossDomain: true,
+    success: function(resp) { // WORKING for fetchuser?
+      // console.log('success',resp);
+      callback(resp);
+    },
+    error: function(resp) {
+      // TODO: Fix this, this always goes to error - not sure.
+      // Found out - jQuery 1.4.2 works with current go server, but breaks with newer ver.
+      console.log('error',resp);
+      callback(null);
+    }
+  });
+};
+
+// Grabs threads for page number
+var fetchPage = function(page, callback) {
+  
+  $.ajax({
+    type: 'POST',
+    url: '/getForumThreadsByRating',
+    data: JSON.stringify({"page_number" : page}),
     crossDomain: true,
     success: function(resp) { // WORKING for fetchuser?
       // console.log('success',resp);
@@ -69,7 +90,7 @@ var updateThread = function(bio,avatar,callback) {
 };
 
 var Thread = {
-  fetch: function(callback) {
+  fetchOne: function(callback) {
     var that = this;
     fetchThread((function(res) {
         if (callback) {
@@ -77,6 +98,16 @@ var Thread = {
         }
         that.onChange(res);
     }));
+  },
+
+  fetchPage: function(page,callback) {
+    var that = this;
+    fetchPage(page,function(res) {
+        if (callback) {
+          callback(res);
+        }
+        that.onChange(res);
+    });
   },
 
   add: function(title, body, callback) {

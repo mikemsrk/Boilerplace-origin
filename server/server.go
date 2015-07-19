@@ -76,10 +76,20 @@ func main() {
     createForumThread(w, r, db, store)
   })
 
-  //get forum thread
-  http.HandleFunc("/getForumThread", func(w http.ResponseWriter, r *http.Request) {
-    getForumThread(w, r, db, store)
+  //get forum threads by user id
+  http.HandleFunc("/getForumThreadsByUserId", func(w http.ResponseWriter, r *http.Request) {
+    getForumThread(w, r, db, store, 0)
   })
+
+  //get forum threads by rating
+  http.HandleFunc("/getForumThreadsByRating", func(w http.ResponseWriter, r *http.Request) {
+    getForumThread(w, r, db, store, 1)
+  })
+
+  //get forum threads by datetime
+  http.HandleFunc("/getForumThreadsByDatetime", func(w http.ResponseWriter, r *http.Request) {
+    getForumThread(w, r, db, store, 2)
+  })   
 
   //score forum thread
   http.HandleFunc("/scoreForumThread", func(w http.ResponseWriter, r *http.Request) {

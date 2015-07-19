@@ -31,27 +31,77 @@
 
     });
 
-    $('#getForumThread').click(function() {
+    $('#getForumThreadsByUser').click(function() {
+
+      var pageNumber = parseInt($('#pageNumber').val());
+
+      $('#pageNumber').val(''); 
 
       $.ajax({
-      type: 'GET',
-      url: 'http://127.0.0.1:8080/getForumThread',
-      // contentType: "application/json",
-      crossDomain: true,
-        success: function(data, textStatus, jqXHR)
-        {
+        type: 'POST',
+        url: 'http://127.0.0.1:8080/getForumThreadsByUserId',
+        data: JSON.stringify({"page_number" : pageNumber}),
+        // contentType: "application/json",
+        // crossDomain: true,
+          success: function(data, textStatus, jqXHR) {
             console.log(data);
+            // console.log('success');
             //data - response from server
- 
+          },
+          error: function (jqXHR, textStatus, errorThrown) {
+            console.log(errorThrown);
+          }
+      });
 
-        },
-        error: function (jqXHR, textStatus, errorThrown)
-        {
-          
-        }
-      });      
+    });
 
-    });           
+    $('#getForumThreadsByRating').click(function() {
+
+      var pageNumber = parseInt($('#pageNumber').val());
+
+      $('#pageNumber').val(''); 
+
+      $.ajax({
+        type: 'POST',
+        url: 'http://127.0.0.1:8080/getForumThreadsByRating',
+        data: JSON.stringify({"page_number" : pageNumber}),
+        // contentType: "application/json",
+        // crossDomain: true,
+          success: function(data, textStatus, jqXHR) {
+            console.log(data);
+            // console.log('success');
+            //data - response from server
+          },
+          error: function (jqXHR, textStatus, errorThrown) {
+            console.log(errorThrown);
+          }
+      });
+
+    });
+    
+    $('#getForumThreadsByDatetime').click(function() {
+
+      var pageNumber = parseInt($('#pageNumber').val());
+
+      $('#pageNumber').val(''); 
+
+      $.ajax({
+        type: 'POST',
+        url: 'http://127.0.0.1:8080/getForumThreadsByDatetime',
+        data: JSON.stringify({"page_number" : pageNumber}),
+        // contentType: "application/json",
+        // crossDomain: true,
+          success: function(data, textStatus, jqXHR) {
+            console.log(data);
+            // console.log('success');
+            //data - response from server
+          },
+          error: function (jqXHR, textStatus, errorThrown) {
+            console.log(errorThrown);
+          }
+      });
+
+    });            
 
     $('#updateScore').click(function() {
 
@@ -120,7 +170,10 @@ Body: <input type="text" id="body" name="body" placeholder="Body"><br>
 
 <br>
 
-<input id="getForumThread" type="submit" value="Get Forum Thread"><br>
+Page Number: <input type="text" id="pageNumber" name="pageNumber" placeholder="pageNumber"><br>
+<input id="getForumThreadsByUser" type="submit" value="Get Forum Threads By User"><br>
+<input id="getForumThreadsByRating" type="submit" value="Get Forum Threads By Rating"><br>
+<input id="getForumThreadsByDatetime" type="submit" value="Get Forum Threads By Datetime"><br>
 
 <br>
 

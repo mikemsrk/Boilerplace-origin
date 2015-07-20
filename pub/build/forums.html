@@ -129,6 +129,110 @@
 
     });
  
+     $('#createThreadPost').click(function() {
+
+      var threadId = parseInt($('#threadId0').val());
+      var contents = $('#postContents').val();
+
+      $('#threadId0').val(''); 
+      $('#postContents').val(''); 
+
+      $.ajax({
+        type: 'POST',
+        url: 'http://127.0.0.1:8080/createThreadPost',
+        data: JSON.stringify({"thread_id" : threadId, "contents" : contents}),
+        // contentType: "application/json",
+        // crossDomain: true,
+          success: function(data, textStatus, jqXHR) {
+            console.log(data);
+            // console.log('success');
+            //data - response from server
+          },
+          error: function (jqXHR, textStatus, errorThrown) {
+            console.log(errorThrown);
+          }
+      });
+
+    });
+
+    $('#getThreadPostsByUser').click(function() {
+
+      var threadId = parseInt($('#threadId1').val());
+      var pageNumber = parseInt($('#pageNumber1').val());
+
+      $('#threadId1').val(''); 
+      $('#pageNumber1').val(''); 
+
+      $.ajax({
+        type: 'POST',
+        url: 'http://127.0.0.1:8080/getThreadPostsByUserId',
+        data: JSON.stringify({"thread_id" : threadId, "page_number" : pageNumber}),
+        // contentType: "application/json",
+        // crossDomain: true,
+          success: function(data, textStatus, jqXHR) {
+            console.log(data);
+            // console.log('success');
+            //data - response from server
+          },
+          error: function (jqXHR, textStatus, errorThrown) {
+            console.log(errorThrown);
+          }
+      });
+
+    });
+
+    $('#getThreadPostsByRating').click(function() {
+
+      var threadId = parseInt($('#threadId1').val());
+      var pageNumber = parseInt($('#pageNumber1').val());
+
+      $('#threadId1').val(''); 
+      $('#pageNumber1').val(''); 
+
+      $.ajax({
+        type: 'POST',
+        url: 'http://127.0.0.1:8080/getThreadPostsByRating',
+        data: JSON.stringify({"thread_id" : threadId, "page_number" : pageNumber}),
+        // contentType: "application/json",
+        // crossDomain: true,
+          success: function(data, textStatus, jqXHR) {
+            console.log(data);
+            // console.log('success');
+            //data - response from server
+          },
+          error: function (jqXHR, textStatus, errorThrown) {
+            console.log(errorThrown);
+          }
+      });
+
+    });
+    
+    $('#getThreadPostsByDatetime').click(function() {
+
+      var threadId = parseInt($('#threadId1').val());
+      var pageNumber = parseInt($('#pageNumber1').val());
+
+      $('#threadId1').val(''); 
+      $('#pageNumber1').val(''); 
+
+      $.ajax({
+        type: 'POST',
+        url: 'http://127.0.0.1:8080/getThreadPostsByDatetime',
+        data: JSON.stringify({"thread_id" : threadId, "page_number" : pageNumber}),
+        // contentType: "application/json",
+        // crossDomain: true,
+          success: function(data, textStatus, jqXHR) {
+            console.log(data);
+            // console.log('success');
+            //data - response from server
+          },
+          error: function (jqXHR, textStatus, errorThrown) {
+            console.log(errorThrown);
+          }
+      });
+
+    });       
+
 
   });
 </script>
@@ -170,7 +274,7 @@ Body: <input type="text" id="body" name="body" placeholder="Body"><br>
 
 <br>
 
-Page Number: <input type="text" id="pageNumber" name="pageNumber" placeholder="pageNumber"><br>
+Page Number: <input type="text" id="pageNumber" name="pageNumber" placeholder="Page Number"><br>
 <input id="getForumThreadsByUser" type="submit" value="Get Forum Threads By User"><br>
 <input id="getForumThreadsByRating" type="submit" value="Get Forum Threads By Rating"><br>
 <input id="getForumThreadsByDatetime" type="submit" value="Get Forum Threads By Datetime"><br>
@@ -180,6 +284,20 @@ Page Number: <input type="text" id="pageNumber" name="pageNumber" placeholder="p
 Thread Id: <input type="text" id="threadId" name="threadId" placeholder="Thread Id"><br>
 Score: <input type="text" id="score" name="score" placeholder="Score"><br>
 <input id="updateScore" type="submit" value="Update Score"><br>
+
+<br>
+
+Thread Id: <input type="text" id="threadId0" name="threadId0" placeholder="Thread Id0"><br>
+Post Contents: <input type="text" id="postContents" name="postContents" placeholder="Post Contents"><br>
+<input id="createThreadPost" type="submit" value="Create Thread Post"><br>
+
+<br>
+
+Thread Id: <input type="text" id="threadId1" name="threadId1" placeholder="Thread Id1"><br>
+Page Number: <input type="text" id="pageNumber1" name="pageNumber1" placeholder="Page Number1"><br>
+<input id="getThreadPostsByUser" type="submit" value="Get Thread Posts By User"><br>
+<input id="getThreadPostsByRating" type="submit" value="Get Thread Posts By Rating"><br>
+<input id="getThreadPostsByDatetime" type="submit" value="Get Thread Posts By Datetime"><br>
 
 <br>
 

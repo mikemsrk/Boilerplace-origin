@@ -2,6 +2,9 @@ var React = require('react');
 var ThreadStore = require('../../stores/ThreadStore');
 var ThreadActions = require('../../actions/ThreadActions');
 
+var CommentList = require('../comment/comment-list');
+var CommentInput = require('../comment/comment-input');
+
 var Thread = React.createClass({
 
   getInitialState: function(){
@@ -40,6 +43,8 @@ var Thread = React.createClass({
           <p>Thread Body</p>
         </div> 
         <p> Rating: 0 </p>
+
+        <CommentList />
       </div>
     );
   }

@@ -44,6 +44,7 @@ var App = React.createClass({
   }
 });
 
+// TODO: Setup thread routes
 var routes = (
   <Route path="/" handler={App}>
     <DefaultRoute handler={Front}/>
@@ -52,12 +53,16 @@ var routes = (
     <Route path="logout" handler={Logout}/>
     <Route path="signup" handler={Signup}/>
     <Route path="new" handler={NewThread}/>
+    <Route path="thread/:id" handler={Thread}/>
   </Route>
 );
 
 
 Router.run(routes, Router.HashLocation, function(Root){
-  React.render(<Root/>, document.getElementById('app'));
+  React.render(
+    <Root locales={['en-US']}/>,
+    document.getElementById('app')
+  );
 });
 	
 module.exports = App;

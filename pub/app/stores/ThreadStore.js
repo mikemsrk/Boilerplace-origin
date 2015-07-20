@@ -28,6 +28,14 @@ var ThreadStore = assign({}, EventEmitter.prototype, {
     return _userThreads;
   },
 
+  fetchThread: function(id){
+    var that = this;
+    Thread.fetchThread(id, function(data){
+      _thread = data;
+      that.emitChange();
+    });
+  },
+
   fetchPage: function(page){
     var that = this;
     Thread.fetchPage(page, function(data){
@@ -51,6 +59,13 @@ var ThreadStore = assign({}, EventEmitter.prototype, {
     });
   },
 
+  vote: function(thread_id,score){
+    var that = this;
+    Thread.vote(thread_id,score,function(data){
+      that.emitChange();
+    });
+  },
+
   update: function(bio,avatar){
     // var that = this;
     // Thread.update(bio,avatar,function(data){
@@ -62,13 +77,6 @@ var ThreadStore = assign({}, EventEmitter.prototype, {
   delete: function(){
 
 
-  },
-
-  vote: function(thread_id,score){
-    var that = this;
-    Thread.vote(thread_id,score,function(data){
-      that.emitChange();
-    });
   },
 
   addChangeListener: function(cb) {
@@ -93,18 +101,20 @@ AppDispatcher.register(function(payload){
       ThreadStore.fetchUserPage(action.data.page);
       ThreadStore.emitChange();
       break;
-    case ThreadConstants.FETCHONE:
-      // ThreadStore.fetch(action.data.page);
+    case ThreadConstants.FETCHTHREAD:
+      ThreadStore.fetchThread(action.data.id);
       ThreadStore.emitChange();
       break;
     case ThreadConstants.ADD:
       ThreadStore.add(action.data.title,action.data.body);
       break;
     case ThreadConstants.UPDATE:
-      // ThreadStore.delete();
+      // TODO: Updating a thread
+
       break;
     case ThreadConstants.DELETE:
-      // ThreadStore.delete();
+      // TODO: Deleting a thread
+
       break;
     case ThreadConstants.VOTE:
       ThreadStore.vote(action.data.thread_id,action.data.score);

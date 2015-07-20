@@ -10,7 +10,6 @@ var Bio = React.createClass({
   },
 
   // TODO: Bubble this up to profile parent
-
   enableEdit: function(){
     // make the bio field editable
       // replace it with a form.

@@ -24,7 +24,8 @@ var addThread = function(title,body,callback) {
   });
 };
 
-var fetchOne = function(callback) {
+
+var fetchThread = function(id,callback) {
   $.ajax({
     type: 'GET',
     url: '/getUserInfo',
@@ -131,14 +132,14 @@ var vote = function(thread_id, score, callback) {
 };
 
 var Thread = {
-  fetchOne: function(callback) {
+  fetchThread: function(id,callback) {
     var that = this;
-    fetchThread((function(res) {
+    fetchThread(id,function(res) {
         if (callback) {
           callback(res);
         }
         that.onChange(res);
-    }));
+    });
   },
 
   fetchPage: function(page,callback) {

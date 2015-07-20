@@ -3,6 +3,26 @@ var ReactIntl = require('react-intl');
 var FormattedRelative = ReactIntl.FormattedRelative;
 var FormattedDate = ReactIntl.FormattedDate;
 
+// MySQL Date -> JS Date
+var formatDate = function(str){
+  var dateParts = str.split("-");
+  var times = dateParts[2].split(":");
+  var hour = times[0].substr(3);
+  var minutes = times[1];
+  var seconds = times[2].substr(0,2);
+
+  return new Date(dateParts[0], dateParts[1] - 1, dateParts[2].substr(0,2),hour,minutes,seconds);
+};
+
+// Shortens the body to fit in the table
+var formatBody = function(str){
+  var shortStr = str.substr(0,40);
+  if(str.length >= 40){
+    shortStr += '...';
+  }
+  return shortStr;
+};
+
 // Front page thread list
 var ThreadItem = React.createClass({
 
@@ -21,25 +41,30 @@ var ThreadItem = React.createClass({
   },
 
   render: function() {
+    // TODO: Clicking on title takes you to individual thread page
+    var created = formatDate(this.props.item.creation_time);
+    var updated = formatDate(this.props.item.last_update_time);
+    var body = formatBody(this.props.item.body);
+
     return (
       <tr>
         <td>
           <a href="#" ref="down" className="glyphicon glyphicon-chevron-down" aria-hidden="true" onClick={this.downVote}></a> {this.props.item.rating} <a href="#" ref="up" className="glyphicon glyphicon-chevron-up" aria-hidden="true" onClick={this.upVote}></a></td>
-        <td>{this.props.item.title}</td>
-        <td>{this.props.item.body}</td>
+        <td><a href={"#/thread/"+this.props.item.thread_id}>{this.props.item.title}</a></td>
+        <td>{body}</td>
         <td>User: {this.props.item.creator_user_id}</td>
 
         <td>
           <FormattedDate
-            value={new Date(this.props.item.creation_time)}
+            value={created}
             day="numeric"
             month="long"
             year="numeric" />
         </td>
 
         <td>
-          <FormattedRelative 
-            value={String(this.props.item.last_update_time)} />
+        <FormattedRelative 
+            value= {updated} />
         </td>
 
       </tr>

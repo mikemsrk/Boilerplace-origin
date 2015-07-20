@@ -40,6 +40,10 @@ var Threads = React.createClass({
     ThreadActions.vote({thread_id:id,score:-1});
   },
 
+  goThread: function(id){
+    console.log('transitioning to...thread',id);
+  },
+
   render: function() {
     return (
       <div className="threads">
@@ -61,7 +65,13 @@ var Threads = React.createClass({
               {
                 this.state.threads.map(function(item){
                   return (
-                    <ThreadItem ref="thread" onUpVote={this.upVote} onDownVote={this.downVote} key={item.thread_id} item={item}/>
+                    <ThreadItem 
+                      ref = "thread" 
+                      onGoThread = {this.goThread} 
+                      onUpVote = {this.upVote} 
+                      onDownVote = {this.downVote} 
+                      key = {item.thread_id} 
+                      item = {item} />
                   );
                 },this)
               }

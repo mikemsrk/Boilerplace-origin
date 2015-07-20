@@ -24,13 +24,13 @@ var ThreadActions = {
   },
 
   // Fetches one thread only
-  fetchOne: function(data){
+  fetchThread: function(data){
     AppDispatcher.handleAction({
-      actionType: ThreadConstants.FETCHONE,
+      actionType: ThreadConstants.FETCHTHREAD,
       data: data
     });
   },
-
+  // Rate a thread up or down
   vote: function(data){
     AppDispatcher.handleAction({
       actionType: ThreadConstants.VOTE,

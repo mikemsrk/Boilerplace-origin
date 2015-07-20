@@ -43,7 +43,6 @@ var NewComment = React.createClass({
   render: function() {
     return (
       <div className="newComment">
-        <h3>New Comment</h3>
         <form onSubmit={this.addComment}>
           <input type="textarea" className="form-control" placeholder="comment..." ref="body" />
           <button type="submit" className="btn btn-success" value="Submit">Submit</button>

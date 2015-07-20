@@ -48,7 +48,7 @@ type PlayerMessageOutbound struct {
 
 //struct containing a user's info
 type UserInfoOutbound struct {
-  Id int `json:"id"`
+  User_id int `json:"user_id"`
   User_name string `json:"user_name"`
   First_name string `json:"first_name"`
   Last_name string `json:"last_name"`
@@ -60,9 +60,11 @@ type UserInfoOutbound struct {
 //struct containing a forum thread's info
 type ForumThreadInfoOutbound struct {
   Thread_id int `json:"thread_id"`
-  Creator_user_id int `json:"creator_user_id"`
+  User_id int `json:"user_id"`
+  User_name string `json:"user_name"`
   Title string `json:"title"`
-  Body string `json:"body"`
+  Body string `json:"body"`  
+  Post_count int `json:"post_count"`
   Rating int `json:"rating"`
   Creation_time time.Time `json:"creation_time"`
   Last_update_time time.Time `json:"last_update_time"`
@@ -73,4 +75,20 @@ type ForumThreadCollectionOutbound struct {
   ForumThreads []*ForumThreadInfoOutbound `json:"forumThreads"`
 }
 
+//struct containing a forum thread post's info
+type ThreadPostInfoOutbound struct {
+  Post_id int `json:"post_id"`
+  Thread_id int `json:"thread_id"`
+  User_id int `json:"user_id"`
+  User_name string `json:"user_name"`  
+  Contents string `json:"contents"`
+  Rating int `json:"rating"`
+  Creation_time time.Time `json:"creation_time"`
+  Last_update_time time.Time `json:"last_update_time"`
+}
+
+//struct containing an array of forum thread posts
+type ThreadPostCollectionOutbound struct {
+  ThreadPosts []*ThreadPostInfoOutbound `json:"threadPosts"`
+}
 

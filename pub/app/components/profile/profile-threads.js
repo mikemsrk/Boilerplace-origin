@@ -33,7 +33,7 @@ var BioThreads = React.createClass({
     return (
       <div className="col-md-9">
         <h3>My Threads</h3>
-        <table className="table">
+        <table className="table table-hover">
           <thead>
             <tr>
               <th>Rating</th>

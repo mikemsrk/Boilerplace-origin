@@ -45,7 +45,7 @@ var Threads = React.createClass({
       <div className="threads">
         
           <h3>Front Page</h3>
-          <table className="table">
+          <table className="table table-hover">
             <thead>
               <tr>
                 <th>Rating</th>

@@ -37,7 +37,7 @@ var ProfileThreadItem = React.createClass({
         <td>{this.props.item.rating}</td>
         <td><a href={"#/thread/"+this.props.item.thread_id}>{this.props.item.title}</a></td>
         <td>{body}</td>
-        <td>User: {this.props.item.creator_user_id}</td>
+        <td>User: {this.props.item.user_id}</td>
         
         <td>
           <FormattedDate

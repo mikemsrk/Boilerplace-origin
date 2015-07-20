@@ -55,7 +55,7 @@ var Bio = React.createClass({
         )}
 
         <p>Rep: {this.props.item.rep}</p>
-        <p>Id: {this.props.item.id}</p>
+        <p>Id: {this.props.item.user_id}</p>
 
         {!this.state.editing ? (
           <p>Bio: {this.props.item.bio}</p>

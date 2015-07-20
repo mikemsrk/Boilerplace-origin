@@ -50,7 +50,7 @@ var CommentItem = React.createClass({
         <td>
           <a href="#" ref="down" className="glyphicon glyphicon-chevron-down" aria-hidden="true" onClick={this.downVote}></a> {this.props.item.rating} <a href="#" ref="up" className="glyphicon glyphicon-chevron-up" aria-hidden="true" onClick={this.upVote}></a></td>
         <td>{body}</td>
-        <td>User: {this.props.item.creator_user_id}</td>
+        <td>User: {this.props.item.user_id}</td>
 
         <td>
           <FormattedDate

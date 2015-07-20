@@ -48,7 +48,7 @@ var fetchPage = function(page, callback) {
   
   $.ajax({
     type: 'POST',
-    url: '/getForumCommentsByRating',
+    url: '/getForumThreadsByRating',
     data: JSON.stringify({"page_number" : page}),
     crossDomain: true,
     success: function(resp) { // WORKING for fetchuser?
@@ -68,7 +68,7 @@ var fetchUserPage = function(page, callback) {
   
   $.ajax({
     type: 'POST',
-    url: '/getForumCommentsByUserId',
+    url: '/getForumThreadsByUserId',
     data: JSON.stringify({"page_number" : page}),
     crossDomain: true,
     success: function(resp) { // WORKING for fetchuser?
@@ -110,12 +110,12 @@ var updateComment = function(bio,avatar,callback) {
   });
 };
 
-var vote = function(Comment_id, score, callback) {
+var vote = function(comment_id, score, callback) {
   
   $.ajax({
     type: 'POST',
     url: '/scoreForumComment',
-    data: JSON.stringify({"Comment_id" : Comment_id, "score" : score}),
+    data: JSON.stringify({"comment_id" : comment_id, "score" : score}),
     crossDomain: true,
     success: function(resp) { // WORKING for fetchuser?
       // console.log('success',resp);

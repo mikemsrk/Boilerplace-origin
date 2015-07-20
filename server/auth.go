@@ -107,7 +107,7 @@ func createUserHandler (w http.ResponseWriter, r *http.Request, db *sql.DB) {
       if err != nil {
         http.Error(w, err.Error(), http.StatusInternalServerError)
       }
-      session.Values["id"] = int(lastId)
+      session.Values["userid"] = int(lastId)
       session.Values["username"] = username   
       session.AddFlash("This is a flashed message!", "message")
       session.Save(r, w) 
@@ -169,7 +169,7 @@ func updateUserInfoHandler(w http.ResponseWriter, r *http.Request, db *sql.DB, s
   //session.Save(r, w)
 
   //get the user id and username from the cookie
-  userid := session.Values["id"].(int)
+  userid := session.Values["userid"].(int)
   username := session.Values["username"].(string)
 
   //parse the body of the request into a string
@@ -189,7 +189,7 @@ func updateUserInfoHandler(w http.ResponseWriter, r *http.Request, db *sql.DB, s
   avatar_link := dat["avatar_link"].(string)
 
   //update user's bio and avatar_link
-  stmt, err := db.Prepare("update users set bio=?, avatar_link=? where id=?")
+  stmt, err := db.Prepare("update users set bio=?, avatar_link=? where user_id=?")
   if err != nil {
     log.Fatal(err)
   }
@@ -242,7 +242,7 @@ func getUserInfoHandler(w http.ResponseWriter, r *http.Request, db *sql.DB, stor
   //session.Save(r, w)
 
   //get the user id and username from the cookie
-  userid := session.Values["id"].(int)
+  userid := session.Values["userid"].(int)
   username := session.Values["username"].(string)
 
   //variable(s) to hold the returned values from the query
@@ -255,7 +255,7 @@ func getUserInfoHandler(w http.ResponseWriter, r *http.Request, db *sql.DB, stor
   )
 
   //query the database for the user id
-  err = db.QueryRow("select first_name, last_name, bio, rep, avatar_link from users where id = ?", userid).Scan(&queried_first_name, &queried_last_name, &queried_bio, &queried_rep, &queried_avatar_link)
+  err = db.QueryRow("select first_name, last_name, bio, rep, avatar_link from users where user_id = ?", userid).Scan(&queried_first_name, &queried_last_name, &queried_bio, &queried_rep, &queried_avatar_link)
   switch {
 
     //if user id doesn't exist   
@@ -278,7 +278,7 @@ func getUserInfoHandler(w http.ResponseWriter, r *http.Request, db *sql.DB, stor
     default:
 
       //create outbound object
-      userInfoOutbound := UserInfoOutbound{Id: userid, User_name: username, First_name: queried_first_name, Last_name: queried_last_name, 
+      userInfoOutbound := UserInfoOutbound{User_id: userid, User_name: username, First_name: queried_first_name, Last_name: queried_last_name, 
         Bio: queried_bio, Rep: queried_rep, Avatar_link: queried_avatar_link}
 
       //json stringify the data
@@ -334,12 +334,12 @@ func loginHandler(w http.ResponseWriter, r *http.Request, db *sql.DB, store *ses
 
   //variable(s) to hold the returned values from the query
   var (
-    queried_id int
+    queried_user_id int
     queried_password_hash string
   )
 
   //query the database for the username
-  err = db.QueryRow("select id, password_hash from users where user_name = ?", username).Scan(&queried_id, &queried_password_hash)
+  err = db.QueryRow("select user_id, password_hash from users where user_name = ?", username).Scan(&queried_user_id, &queried_password_hash)
   switch {
 
     //if username doesn't exist   
@@ -360,7 +360,7 @@ func loginHandler(w http.ResponseWriter, r *http.Request, db *sql.DB, store *ses
 
     //if username exists  
     default:
-      //fmt.Println("Retrieved Id is %d\n", queried_id)
+      //fmt.Println("Retrieved User Id is %d\n", queried_user_id)
       //fmt.Println("Retrieved Password is %s\n", queried_password_hash)
 
       //compare the retrieved password to the password sent by the client
@@ -380,7 +380,7 @@ func loginHandler(w http.ResponseWriter, r *http.Request, db *sql.DB, store *ses
         if err != nil {
           http.Error(w, err.Error(), http.StatusInternalServerError)
         }
-        session.Values["id"] = queried_id
+        session.Values["userid"] = queried_user_id
         session.Values["username"] = username
         session.AddFlash("This is a flashed message!", "message")
         session.Save(r, w)

@@ -95,12 +95,37 @@ func main() {
   http.HandleFunc("/scoreForumThread", func(w http.ResponseWriter, r *http.Request) {
     scoreForumThread(w, r, db, store)
   })      
+
 /*
   //downvote forum thread
   http.HandleFunc("/downvoteForumThread", func(w http.ResponseWriter, r *http.Request) {
     dow(w, r, db, store)
   })
 */
+
+  //routes in thread_posts.go
+
+  //create forum thread post
+  http.HandleFunc("/createThreadPost", func(w http.ResponseWriter, r *http.Request) {
+    createThreadPost(w, r, db, store)
+  })
+
+  //get forum threads by user id
+  http.HandleFunc("/getThreadPostsByUserId", func(w http.ResponseWriter, r *http.Request) {
+    getThreadPost(w, r, db, store, 0)
+  })
+
+  //get forum threads by rating
+  http.HandleFunc("/getThreadPostsByRating", func(w http.ResponseWriter, r *http.Request) {
+    getThreadPost(w, r, db, store, 1)
+  })
+
+  //get forum threads by datetime
+  http.HandleFunc("/getThreadPostsByDatetime", func(w http.ResponseWriter, r *http.Request) {
+    getThreadPost(w, r, db, store, 2)
+  })   
+
+
 
   //routes for sockets
 
@@ -151,7 +176,7 @@ func connect(w http.ResponseWriter, r *http.Request, room *GameRoom, store *sess
   fmt.Println("New user connected")
 
   //use the id and username attached to the session to create the player
-  playerHandler := PlayerHandler{Id: session.Values["id"].(int), Username: session.Values["username"].(string), Room: room}
+  playerHandler := PlayerHandler{Id: session.Values["userid"].(int), Username: session.Values["username"].(string), Room: room}
 
   playerHandler.createPlayer(w, r)
 }

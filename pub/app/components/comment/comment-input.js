@@ -4,24 +4,10 @@ var CommentActions = require('../../actions/CommentActions');
 var AuthStore = require('../../stores/AuthStore');
 
 var NewComment = React.createClass({
-  getInitialState: function(){
-    // if(!AuthStore.loggedIn()){
-    //   location.hash = '/login';
-    // }
-    return {
-      success: false
-    };
-  },
 
-  componentDidMount: function(){
-    CommentStore.addChangeListener(this._onChange);
-  },
+  addComment: function(e){
 
-  componentWillUnmount: function(){
-    CommentStore.removeChangeListener(this._onChange);
-  },
-
-  addComment: function(){
+    e.preventDefault();
     // Send action to update user information
     var body = React.findDOMNode(this.refs.body).value.trim();
 
@@ -29,16 +15,10 @@ var NewComment = React.createClass({
       return;
     }
 
-    CommentActions.add({
-      body: body
-    });
+    this.props.onAddComment(body);
+    React.findDOMNode(this.refs.body).value = '';
 
   },
-
-  _onChange: function(){
-    // TODO: Bubble this up and update the list
-  },
-
 
   render: function() {
     return (

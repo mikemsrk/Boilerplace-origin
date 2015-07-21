@@ -1,10 +1,10 @@
-var addComment = function(title,body,callback) {
+var addComment = function(threadId,body,callback) {
   return $.ajax({
     type: 'POST',
-    url: '/createForumComment',
+    url: '/createThreadPost',
     data: JSON.stringify({
-      "title": title,
-      "body": body
+      "thread_id": parseInt(threadId),
+      "contents": body
     }),
     crossDomain: true,
     success: function(resp) {
@@ -44,12 +44,11 @@ var fetchComment = function(id,callback) {
 };
 
 // Grabs Comments for page number
-var fetchPage = function(page, callback) {
-  
+var fetchPage = function(threadId, page, callback) {
   $.ajax({
     type: 'POST',
-    url: '/getForumThreadsByRating',
-    data: JSON.stringify({"page_number" : page}),
+    url: '/getThreadPostsByRating',
+    data: JSON.stringify({"thread_id": parseInt(threadId), "page_number" : parseInt(page)}),
     crossDomain: true,
     success: function(resp) { // WORKING for fetchuser?
       // console.log('success',resp);
@@ -62,6 +61,7 @@ var fetchPage = function(page, callback) {
       callback(null);
     }
   });
+
 };
 
 var fetchUserPage = function(page, callback) {
@@ -132,19 +132,10 @@ var vote = function(comment_id, score, callback) {
 };
 
 var Comment = {
-  fetchComment: function(id,callback) {
-    var that = this;
-    fetchComment(id,function(res) {
-        if (callback) {
-          callback(res);
-        }
-        that.onChange(res);
-    });
-  },
 
-  fetchPage: function(page,callback) {
+  fetchPage: function(threadId, page, callback) {
     var that = this;
-    fetchPage(page,function(res) {
+    fetchPage(threadId, page ,function(res) {
         if (callback) {
           callback(res);
         }
@@ -162,10 +153,10 @@ var Comment = {
     });
   },
 
-  add: function(title, body, callback) {
+  add: function(threadId, body, callback) {
     var that = this;
 
-    addComment(title, body, function(res) {
+    addComment(threadId, body, function(res) {
       if (callback) {
         callback(res);
       }

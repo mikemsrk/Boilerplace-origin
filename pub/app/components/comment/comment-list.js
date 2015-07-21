@@ -23,19 +23,25 @@ var CommentList = React.createClass({
   },
 
   componentDidMount: function(){
-    // CommentActions.fetchPage({page:this.state.page});
-    // CommentStore.addChangeListener(this._onChange);
+    CommentActions.fetchPage({threadId: this.props.threadId, page:this.state.page});
+    CommentStore.addChangeListener(this._onChange);
   },
 
   componentWillUnmount: function(){
-    // CommentStore.removeChangeListener(this._onChange);
+    CommentStore.removeChangeListener(this._onChange);
   },
 
   _onChange: function(){
-    // this.setState({
-    //   comments: CommentStore.getComments().forumComments
-    // });
-    // console.log(this.state.comments);
+    this.setState({
+      comments: CommentStore.getComments().threadPosts
+    });
+    // console.log(CommentStore.getComments().threadPosts);
+    console.log(this.state.comments);
+  },
+
+  addComment: function(body){
+    CommentActions.add({threadId:this.props.threadId, body:body});
+    CommentActions.fetchPage({threadId: this.props.threadId, page:this.state.page});
   },
 
   upVote: function(id){
@@ -52,7 +58,7 @@ var CommentList = React.createClass({
     return (
       <div className="Comments">
         
-          <NewComment />
+          <NewComment onAddComment={this.addComment}/>
           <h3>Comments</h3>
           <table className="table table-hover">
           
@@ -75,7 +81,7 @@ var CommentList = React.createClass({
                       onGoThread = {this.goThread} 
                       onUpVote = {this.upVote} 
                       onDownVote = {this.downVote} 
-                      key = {item.thread_id} 
+                      key = {item.post_id} 
                       item = {item} />
                   );
                 },this)

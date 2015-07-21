@@ -4,21 +4,21 @@ var CommentConstants = require('../constants/CommentConstants');
 var CommentActions = {
   add: function(data){
     AppDispatcher.handleAction({
-      actionType: CommentConstants.ADD,
+      actionType: CommentConstants.POST_ADD,
       data: data
     });
   },
   // Fetches a page of Comments
   fetchPage: function(data){
     AppDispatcher.handleAction({
-      actionType: CommentConstants.FETCHPAGE,
+      actionType: CommentConstants.POST_FETCHPAGE,
       data: data
     });
   },
 
   fetchUserPage: function(data){
     AppDispatcher.handleAction({
-      actionType: CommentConstants.FETCHUSERPAGE,
+      actionType: CommentConstants.POST_FETCHUSERPAGE,
       data: data
     });
   },
@@ -26,14 +26,14 @@ var CommentActions = {
   // Fetches one Comment only
   fetchComment: function(data){
     AppDispatcher.handleAction({
-      actionType: CommentConstants.FETCHCOMMENT,
+      actionType: CommentConstants.POST_FETCHCOMMENT,
       data: data
     });
   },
   // Rate a Comment up or down
   vote: function(data){
     AppDispatcher.handleAction({
-      actionType: CommentConstants.VOTE,
+      actionType: CommentConstants.POST_VOTE,
       data: data
     });
   }

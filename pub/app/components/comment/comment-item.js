@@ -43,13 +43,12 @@ var CommentItem = React.createClass({
   render: function() {
     var created = formatDate(this.props.item.creation_time);
     var updated = formatDate(this.props.item.last_update_time);
-    var body = formatBody(this.props.item.body);
 
     return (
       <tr>
         <td>
           <a href="#" ref="down" className="glyphicon glyphicon-chevron-down" aria-hidden="true" onClick={this.downVote}></a> {this.props.item.rating} <a href="#" ref="up" className="glyphicon glyphicon-chevron-up" aria-hidden="true" onClick={this.upVote}></a></td>
-        <td>{body}</td>
+        <td>{this.props.item.contents}</td>
         <td>User: {this.props.item.user_id}</td>
 
         <td>

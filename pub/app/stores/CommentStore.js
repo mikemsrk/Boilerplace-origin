@@ -28,17 +28,9 @@ var CommentStore = assign({}, EventEmitter.prototype, {
     return _userComments;
   },
 
-  fetchComment: function(id){
+  fetchPage: function(threadId, page){
     var that = this;
-    Comment.fetchComment(id, function(data){
-      _comment = data;
-      that.emitChange();
-    });
-  },
-
-  fetchPage: function(page){
-    var that = this;
-    Comment.fetchPage(page, function(data){
+    Comment.fetchPage(threadId, page, function(data){
       _comments = data;
       that.emitChange();
     });
@@ -52,9 +44,9 @@ var CommentStore = assign({}, EventEmitter.prototype, {
     });
   },
 
-  add: function(title,body){
+  add: function(threadId,body){
     var that = this;
-    Comment.add(title,body,function(data){
+    Comment.add(threadId,body,function(data){
       that.emitChange();
     });
   },
@@ -93,30 +85,26 @@ AppDispatcher.register(function(payload){
   var action = payload.action;
 
   switch(action.actionType){
-    case CommentConstants.FETCHPAGE:
-      CommentStore.fetchPage(action.data.page);
+    case CommentConstants.POST_FETCHPAGE:
+      CommentStore.fetchPage(action.data.threadId, action.data.page);
       CommentStore.emitChange();
       break;
-    case CommentConstants.FETCHUSERPAGE:
+    case CommentConstants.POST_FETCHUSERPAGE:
       CommentStore.fetchUserPage(action.data.page);
       CommentStore.emitChange();
       break;
-    case CommentConstants.FETCHComment:
-      CommentStore.fetchComment(action.data.id);
-      CommentStore.emitChange();
+    case CommentConstants.POST_ADD:
+      CommentStore.add(action.data.threadId,action.data.body);
       break;
-    case CommentConstants.ADD:
-      CommentStore.add(action.data.title,action.data.body);
-      break;
-    case CommentConstants.UPDATE:
+    case CommentConstants.POST_UPDATE:
       // TODO: Updating a Comment
 
       break;
-    case CommentConstants.DELETE:
+    case CommentConstants.POST_DELETE:
       // TODO: Deleting a Comment
 
       break;
-    case CommentConstants.VOTE:
+    case CommentConstants.POST_VOTE:
       CommentStore.vote(action.data.Comment_id,action.data.score);
       break;
 

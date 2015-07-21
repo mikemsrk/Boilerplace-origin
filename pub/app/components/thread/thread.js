@@ -44,7 +44,7 @@ var Thread = React.createClass({
         </div> 
         <p> Rating: 0 </p>
 
-        <CommentList />
+        <CommentList threadId={this.state.id}/>
       </div>
     );
   }

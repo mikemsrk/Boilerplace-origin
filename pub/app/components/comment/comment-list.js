@@ -35,8 +35,6 @@ var CommentList = React.createClass({
     this.setState({
       comments: CommentStore.getComments().threadPosts
     });
-    // console.log(CommentStore.getComments().threadPosts);
-    console.log(this.state.comments);
   },
 
   addComment: function(body){

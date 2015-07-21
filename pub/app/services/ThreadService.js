@@ -26,19 +26,26 @@ var addThread = function(title,body,callback) {
 
 
 var fetchThread = function(id,callback) {
+  console.log('trying to fetch single thread...',id);
+  console.log(JSON.stringify({"thread_id" : parseInt(id), "page_number" : 0}));
   $.ajax({
-    type: 'GET',
-    url: '/getUserInfo',
+    type: 'POST',
+    url: '/getForumThreadsByThreadId',
+    data: JSON.stringify({"thread_id" : parseInt(id), "page_number" : 0}),
     crossDomain: true,
-    success: function(resp) { // WORKING for fetchuser?
-      // console.log('success',resp);
-      callback(resp);
+    success: function(resp) {
+      console.log('success',resp);
+      return callback(resp);
     },
     error: function(resp) {
       // TODO: Fix this, this always goes to error - not sure.
       // Found out - jQuery 1.4.2 works with current go server, but breaks with newer ver.
       console.log('error',resp);
-      callback(null);
+      if(resp.responseText === ""){ // if no error msg
+        callback(resp);
+      }else{         // if error msg
+        callback(null);
+      }
     }
   });
 };

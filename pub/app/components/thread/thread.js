@@ -31,11 +31,9 @@ var Thread = React.createClass({
       body: ThreadStore.getThread().body,
       rating: ThreadStore.getThread().rating
     });
-    console.log(this.state);
   },
 
   render: function() {
-    console.log(this.state.id);
     return (
       <div className="col-md-12">
         <h3> Thread Title </h3>

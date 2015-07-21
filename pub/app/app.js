@@ -9,6 +9,7 @@ var Logout = require('./components/logout/logout');
 var Signup = require('./components/signup/signup');
 var NewThread = require('./components/thread/new');
 var Thread = require('./components/thread/thread');
+var User = require('./components/user/user');
 
 var Route = Router.Route;
 var DefaultRoute = Router.DefaultRoute;
@@ -54,6 +55,7 @@ var routes = (
     <Route path="signup" handler={Signup}/>
     <Route path="new" handler={NewThread}/>
     <Route path="thread/:id" handler={Thread}/>
+    <Route path="user/:id" handler={User}/>
   </Route>
 );
 

@@ -18,7 +18,7 @@ var Profile = React.createClass({
       first_name: "",
       last_name: "",
       user_name: "",
-      id: 0,
+      user_id: 0,
       rep: 0
     };
   },
@@ -45,6 +45,7 @@ var Profile = React.createClass({
         first_name: ProfileStore.getBio().first_name,
         last_name: ProfileStore.getBio().last_name,
         user_name: ProfileStore.getBio().user_name,
+        user_id: ProfileStore.getBio().user_id,
         bio: ProfileStore.getBio().bio,
         avatar_link: ProfileStore.getBio().avatar_link,
         rep: ProfileStore.getBio().rep

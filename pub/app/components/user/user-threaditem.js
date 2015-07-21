@@ -24,36 +24,21 @@ var formatBody = function(str){
 };
 
 // Front page thread list
-var ThreadItem = React.createClass({
-
-  upVote: function(){
-    this.props.onUpVote(this.props.item.thread_id);
-    React.findDOMNode(this.refs.up).className = '';
-    React.findDOMNode(this.refs.down).className="glyphicon glyphicon-chevron-down"
-    this.props.item.rating++;
-  },
-
-  downVote: function(){
-    this.props.onDownVote(this.props.item.thread_id);
-    React.findDOMNode(this.refs.down).className = '';
-    React.findDOMNode(this.refs.up).className = "glyphicon glyphicon-chevron-up";
-    this.props.item.rating--;
-  },
+var ProfileThreadItem = React.createClass({
 
   render: function() {
-    // TODO: Clicking on title takes you to individual thread page
+    // TODO: Clicking on title takes you to individual thread.
     var created = formatDate(this.props.item.creation_time);
     var updated = formatDate(this.props.item.last_update_time);
     var body = formatBody(this.props.item.body);
 
     return (
       <tr>
-        <td>
-          <a href="#" ref="down" className="glyphicon glyphicon-chevron-down" aria-hidden="true" onClick={this.downVote}></a> {this.props.item.rating} <a href="#" ref="up" className="glyphicon glyphicon-chevron-up" aria-hidden="true" onClick={this.upVote}></a></td>
+        <td>{this.props.item.rating}</td>
         <td><a href={"#/thread/"+this.props.item.thread_id}>{this.props.item.title}</a></td>
         <td>{body}</td>
-        <td><a href={"#/user/"+this.props.item.user_id}> {this.props.item.user_name} </a> </td>
-
+        <td>{this.props.item.user_name}</td>
+        
         <td>
           <FormattedDate
             value={created}
@@ -63,8 +48,8 @@ var ThreadItem = React.createClass({
         </td>
 
         <td>
-        <FormattedRelative 
-            value= {updated} />
+          <FormattedRelative 
+            value={updated} />
         </td>
 
       </tr>
@@ -72,4 +57,4 @@ var ThreadItem = React.createClass({
   }
 });
 
-module.exports = ThreadItem;
+module.exports = ProfileThreadItem;

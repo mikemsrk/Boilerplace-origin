@@ -95,7 +95,7 @@ func createForumThread(w http.ResponseWriter, r *http.Request, db *sql.DB, store
   w.Write([]byte("{\"thread_id\" : " + strconv.FormatInt(lastId, 10) + "}"))
 }
 
-//option: 0 - by user id, 1 - by rating, 2 - by datetime
+//option: 0 - by user id, 1 - by rating, 2 - by datetime, 3 - by thread id
 //TODO: Return correct status and message if session is invalid
 //TODO: Return correct status and message if query failed
 func getForumThread(w http.ResponseWriter, r *http.Request, db *sql.DB, store *sessions.CookieStore, option int) {
@@ -168,8 +168,12 @@ func getForumThread(w http.ResponseWriter, r *http.Request, db *sql.DB, store *s
     dbQuery = "select thread_id, forum_threads.user_id, title, body, post_count, rating, creation_time, last_update_time, user_name from forum_threads inner join users on forum_threads.user_id = users.user_id where forum_threads.user_id = " + strconv.Itoa(userid) + " limit " + strconv.Itoa(limit) + " offset " + strconv.Itoa(offset)
   } else if option == 1 { //find the most popular forum threads
     dbQuery = "select thread_id, forum_threads.user_id, title, body, post_count, rating, creation_time, last_update_time, user_name from forum_threads inner join users on forum_threads.user_id = users.user_id order by rating desc limit " + strconv.Itoa(limit) + " offset " + strconv.Itoa(offset)
-  } else { //find the most recent forum threads
+  } else if option == 2 { //find the most recent forum threads
     dbQuery = "select thread_id, forum_threads.user_id, title, body, post_count, rating, creation_time, last_update_time, user_name from forum_threads inner join users on forum_threads.user_id = users.user_id order by creation_time desc limit " + strconv.Itoa(limit) + " offset " + strconv.Itoa(offset)
+  } else {
+    thread_id := int(dat["thread_id"].(float64))
+
+    dbQuery = "select thread_id, forum_threads.user_id, title, body, post_count, rating, creation_time, last_update_time, user_name from forum_threads inner join users on forum_threads.user_id = users.user_id where thread_id = " + strconv.Itoa(thread_id) + " limit " + strconv.Itoa(limit) + " offset " + strconv.Itoa(offset)
   }
 
   //perform query and check for errors

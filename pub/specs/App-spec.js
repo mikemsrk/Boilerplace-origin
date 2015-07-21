@@ -1,12 +1,14 @@
-var App = require('./../app/app.js');
 var TestUtils = require('react-addons').TestUtils;
+var AuthStore = require('../app/stores/AuthStore');
 
-describe("App", function() {
+describe("AuthStore", function() {
 
-  it("should be wrapped with a div", function() {
-    var app = TestUtils.renderIntoDocument(App());
-    
-    expect(app.getDOMNode().tagName).toEqual('DIV');
+  it("should be an object", function() {
+    expect(typeof AuthStore).toBe('object');
+  });
+
+  it("emit should be a function", function() {
+    expect(typeof AuthStore.emitChange).toBe('function');
   });
 
 });

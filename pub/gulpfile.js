@@ -14,6 +14,8 @@ var shell = require('gulp-shell');
 var glob = require('glob');
 var livereload = require('gulp-livereload');
 
+var Server = require('karma').Server;
+
 // External dependencies you do not want to rebundle while developing,
 // but include in your application deployment
 var dependencies = [
@@ -37,7 +39,6 @@ var browserifyTask = function (options) {
   // files (app.js and vendors.js), as vendors.js will probably not change and
   // takes full advantage of caching
 	appBundler.external(options.development ? dependencies : []);
-
 
   // The rebundle process
   var rebundle = function () {
@@ -119,11 +120,6 @@ var browserifyTask = function (options) {
       }));
     
   }
-
-  // Concat bootstrap and jquery to beginning of app.js for both deployment and build
-  // gulp.src('./node_modules/jquery/dist/jquery.min.js')
-  // .pipe(concat('./node_modules/bootstrap/dist/js/bootstrap.min.js'))
-  // .pipe(concat('./vendors.js'));
   
 }
 
@@ -184,5 +180,8 @@ gulp.task('deploy', function () {
 });
 
 gulp.task('test', function () {
-    
+  new Server({
+     configFile: __dirname + '/karma.conf.js',
+     singleRun: true
+   }).start();
 });

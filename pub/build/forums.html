@@ -129,18 +129,16 @@
 
     });                     
 
-    $('#updateScore').click(function() {
+    $('#upvoteScore').click(function() {
 
       var threadId = parseInt($('#threadId').val());
-      var score = parseInt($('#score').val());
 
       $('#threadId').val('');
-      $('#score').val(''); 
 
       $.ajax({
         type: 'POST',
-        url: 'http://127.0.0.1:8080/scoreForumThread',
-        data: JSON.stringify({"thread_id" : threadId, "score" : score}),
+        url: 'http://127.0.0.1:8080/upvoteForumThread',
+        data: JSON.stringify({"thread_id" : threadId}),
         // contentType: "application/json",
         // crossDomain: true,
           success: function(data, textStatus, jqXHR) {
@@ -154,8 +152,32 @@
       });
 
     });
+
+    $('#downvoteScore').click(function() {
+
+      var threadId = parseInt($('#threadId').val());
+
+      $('#threadId').val('');
+
+      $.ajax({
+        type: 'POST',
+        url: 'http://127.0.0.1:8080/downvoteForumThread',
+        data: JSON.stringify({"thread_id" : threadId}),
+        // contentType: "application/json",
+        // crossDomain: true,
+          success: function(data, textStatus, jqXHR) {
+            console.log(data);
+            // console.log('success');
+            //data - response from server
+          },
+          error: function (jqXHR, textStatus, errorThrown) {
+            console.log(errorThrown);
+          }
+      });
+
+    });    
  
-     $('#createThreadPost').click(function() {
+    $('#createThreadPost').click(function() {
 
       var threadId = parseInt($('#threadId0').val());
       var contents = $('#postContents').val();
@@ -304,14 +326,17 @@ Page Number: <input type="text" id="pageNumber" name="pageNumber" placeholder="P
 <input id="getForumThreadsByUser" type="submit" value="Get Forum Threads By User"><br>
 <input id="getForumThreadsByRating" type="submit" value="Get Forum Threads By Rating"><br>
 <input id="getForumThreadsByDatetime" type="submit" value="Get Forum Threads By Datetime"><br>
+
+<br>
+
 Thread Id: <input type="text" id="threadIdX" name="threadIdX" placeholder="Thread IdX"><br>
 <input id="getForumThreadsByThreadId" type="submit" value="Get Forum Threads By Thread Id"><br>
 
 <br>
 
 Thread Id: <input type="text" id="threadId" name="threadId" placeholder="Thread Id"><br>
-Score: <input type="text" id="score" name="score" placeholder="Score"><br>
-<input id="updateScore" type="submit" value="Update Score"><br>
+<input id="upvoteScore" type="submit" value="Upvote Score"><br>
+<input id="downvoteScore" type="submit" value="Downvote Score"><br>
 
 <br>
 

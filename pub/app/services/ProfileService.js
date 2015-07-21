@@ -16,6 +16,26 @@ var fetchUser = function(callback) {
   });
 };
 
+var fetchUserById = function(id,callback) {
+  $.ajax({
+    type: 'POST',
+    url: '/getUserInfoByUserId',
+    data: JSON.stringify({"user_id" : parseInt(id)}),
+    crossDomain: true,
+    success: function(resp) { // WORKING for fetchuser?
+      // console.log('success',resp);
+      callback(resp);
+    },
+    error: function(resp) {
+      // TODO: Fix this, this always goes to error - not sure.
+      // Found out - jQuery 1.4.2 works with current go server, but breaks with newer ver.
+      console.log('error',resp);
+      callback(null);
+    }
+  });
+
+};
+
 var updateUser = function(bio,avatar,callback) {
   return $.ajax({
     type: 'POST',
@@ -46,6 +66,16 @@ var Profile = {
   fetch: function(callback) {
     var that = this;
     fetchUser((function(res) {
+        if (callback) {
+          callback(res);
+        }
+        that.onChange(res);
+    }));
+  },
+
+  fetchById: function(id,callback) {
+    var that = this;
+    fetchUserById(id,(function(res) {
         if (callback) {
           callback(res);
         }

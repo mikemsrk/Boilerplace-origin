@@ -119,6 +119,11 @@ var browserifyTask = function (options) {
       }));
     
   }
+
+  // Concat bootstrap and jquery to beginning of app.js for both deployment and build
+  // gulp.src('./node_modules/jquery/dist/jquery.min.js')
+  // .pipe(concat('./node_modules/bootstrap/dist/js/bootstrap.min.js'))
+  // .pipe(concat('./vendors.js'));
   
 }
 

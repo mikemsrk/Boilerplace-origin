@@ -22,7 +22,7 @@ var User = React.createClass({
 
   componentDidMount: function(){
     // TODO: fetch by user ID
-    // ProfileActions.fetch();
+    ProfileActions.fetchById({id:this.props.params.id});
     ProfileStore.addChangeListener(this._onChange);
   },
 
@@ -32,15 +32,15 @@ var User = React.createClass({
 
   _onChange: function(){
     // TODO: Set by getUser()
-      // this.setState({
-      //   first_name: ProfileStore.getBio().first_name,
-      //   last_name: ProfileStore.getBio().last_name,
-      //   user_name: ProfileStore.getBio().user_name,
-      //   user_id: ProfileStore.getBio().user_id,
-      //   bio: ProfileStore.getBio().bio,
-      //   avatar_link: ProfileStore.getBio().avatar_link,
-      //   rep: ProfileStore.getBio().rep
-      // });
+      this.setState({
+        first_name: ProfileStore.getOtherBio().first_name,
+        last_name: ProfileStore.getOtherBio().last_name,
+        user_name: ProfileStore.getOtherBio().user_name,
+        user_id: ProfileStore.getOtherBio().user_id,
+        bio: ProfileStore.getOtherBio().bio,
+        avatar_link: ProfileStore.getOtherBio().avatar_link,
+        rep: ProfileStore.getOtherBio().rep
+      });
   },
 
   render: function() {

@@ -16,6 +16,16 @@ var _store = {
   rep: 0
 };
 
+var _otherUser = {
+  avatar_link: "",
+  bio: "",
+  first_name: "",
+  last_name: "",
+  user_name: "",
+  id: 0,
+  rep: 0
+}
+
 var ProfileStore = assign({}, EventEmitter.prototype, {
 
   emitChange: function() {
@@ -26,10 +36,22 @@ var ProfileStore = assign({}, EventEmitter.prototype, {
     return _store;
   },
 
+  getOtherBio: function(){
+    return _otherUser;
+  },
+
   fetch: function(){
     var that = this;
     Profile.fetch(function(data){
       _store = data;
+      that.emitChange();
+    });
+  },
+
+  fetchById: function(id){
+    var that = this;
+    Profile.fetchById(id,function(data){
+      _otherUser = data;
       that.emitChange();
     });
   },
@@ -63,6 +85,10 @@ AppDispatcher.register(function(payload){
   switch(action.actionType){
     case ProfileConstants.FETCH:
       ProfileStore.fetch();
+      ProfileStore.emitChange();
+      break;
+    case ProfileConstants.FETCHBYID:
+      ProfileStore.fetchById(action.data.id);
       ProfileStore.emitChange();
       break;
     case ProfileConstants.UPDATE:

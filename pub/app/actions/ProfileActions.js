@@ -7,6 +7,12 @@ var ProfileActions = {
       actionType: ProfileConstants.FETCH
     });
   },
+  fetchById: function(data){
+    AppDispatcher.handleAction({
+      actionType: ProfileConstants.FETCHBYID,
+      data:data
+    });
+  },
   update: function(data){
     AppDispatcher.handleAction({
       actionType: ProfileConstants.UPDATE,

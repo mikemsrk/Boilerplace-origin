@@ -26,12 +26,10 @@ var addThread = function(title,body,callback) {
 
 
 var fetchThread = function(id,callback) {
-  console.log('trying to fetch single thread...',id);
-  console.log(JSON.stringify({"thread_id" : parseInt(id), "page_number" : 0}));
   $.ajax({
     type: 'POST',
     url: '/getForumThreadsByThreadId',
-    data: JSON.stringify({"thread_id" : parseInt(id), "page_number" : 0}),
+    data: JSON.stringify({"thread_id" : parseInt(id), "page_number" : 1}),
     crossDomain: true,
     success: function(resp) {
       console.log('success',resp);

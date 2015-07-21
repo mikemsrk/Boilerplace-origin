@@ -172,7 +172,7 @@ func getForumThread(w http.ResponseWriter, r *http.Request, db *sql.DB, store *s
     dbQuery = "select thread_id, forum_threads.user_id, title, body, post_count, rating, creation_time, last_update_time, user_name from forum_threads inner join users on forum_threads.user_id = users.user_id order by creation_time desc limit " + strconv.Itoa(limit) + " offset " + strconv.Itoa(offset)
   } else {
     thread_id := int(dat["thread_id"].(float64))
-
+    fmt.Println(dat["thread_id"])
     dbQuery = "select thread_id, forum_threads.user_id, title, body, post_count, rating, creation_time, last_update_time, user_name from forum_threads inner join users on forum_threads.user_id = users.user_id where thread_id = " + strconv.Itoa(thread_id) + " limit " + strconv.Itoa(limit) + " offset " + strconv.Itoa(offset)
   }
 

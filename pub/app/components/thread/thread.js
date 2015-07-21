@@ -27,20 +27,20 @@ var Thread = React.createClass({
 
   _onChange: function(){
     this.setState({
-      title: ThreadStore.getThread().title,
-      body: ThreadStore.getThread().body,
-      rating: ThreadStore.getThread().rating
+      title: ThreadStore.getThread().forumThreads[0].title,
+      body: ThreadStore.getThread().forumThreads[0].body,
+      rating: ThreadStore.getThread().forumThreads[0].rating
     });
   },
 
   render: function() {
     return (
       <div className="col-md-12">
-        <h3> Thread Title </h3>
+        <h3> {this.state.title} </h3>
         <div className="card">
-          <p>Thread Body</p>
+          <p> {this.state.body} </p>
         </div> 
-        <p> Rating: 0 </p>
+        <p> Rating: {this.state.rating} </p>
 
         <CommentList threadId={this.state.id}/>
       </div>

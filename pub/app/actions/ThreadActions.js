@@ -31,9 +31,16 @@ var ThreadActions = {
     });
   },
   // Rate a thread up or down
-  vote: function(data){
+  upVote: function(data){
     AppDispatcher.handleAction({
-      actionType: ThreadConstants.VOTE,
+      actionType: ThreadConstants.UPVOTE,
+      data: data
+    });
+  },
+
+  downVote: function(data){
+    AppDispatcher.handleAction({
+      actionType: ThreadConstants.DOWNVOTE,
       data: data
     });
   }

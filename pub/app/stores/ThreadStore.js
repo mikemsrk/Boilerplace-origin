@@ -59,9 +59,16 @@ var ThreadStore = assign({}, EventEmitter.prototype, {
     });
   },
 
-  vote: function(thread_id,score){
+  upVote: function(thread_id){
     var that = this;
-    Thread.vote(thread_id,score,function(data){
+    Thread.upVote(thread_id,function(data){
+      that.emitChange();
+    });
+  },
+
+  downVote: function(thread_id){
+    var that = this;
+    Thread.downVote(thread_id,function(data){
       that.emitChange();
     });
   },
@@ -116,10 +123,12 @@ AppDispatcher.register(function(payload){
       // TODO: Deleting a thread
 
       break;
-    case ThreadConstants.VOTE:
-      ThreadStore.vote(action.data.thread_id,action.data.score);
+    case ThreadConstants.UPVOTE:
+      ThreadStore.upVote(action.data.thread_id);
       break;
-
+    case ThreadConstants.DOWNVOTE:
+      ThreadStore.downVote(action.data.thread_id);
+      break;
     default:
       return true;
   }

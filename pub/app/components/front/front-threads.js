@@ -32,12 +32,12 @@ var Threads = React.createClass({
 
   upVote: function(id){
     // TODO: call thread action to upvote
-    ThreadActions.vote({thread_id:id,score:1});
+    ThreadActions.upVote({thread_id:id});
   },
 
   downVote: function(id){
     // TODO: call thread action to downvote
-    ThreadActions.vote({thread_id:id,score:-1});
+    ThreadActions.downVote({thread_id:id});
   },
 
   goThread: function(id){

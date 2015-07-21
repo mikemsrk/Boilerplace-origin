@@ -32,6 +32,7 @@ var CommentStore = assign({}, EventEmitter.prototype, {
     var that = this;
     Comment.fetchPage(threadId, page, function(data){
       _comments = data;
+      console.log(data);
       that.emitChange();
     });
   },

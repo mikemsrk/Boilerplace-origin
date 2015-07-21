@@ -17,7 +17,8 @@ var CommentList = React.createClass({
         creation_time: "2015-07-19T10:31:04Z",
         last_update_time: "2015-07-20T12:31:00Z",
         comment_id: 4,
-        user_id: 1
+        user_id: 1,
+        user_name: ''
       }]
     };
   },

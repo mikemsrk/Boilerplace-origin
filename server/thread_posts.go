@@ -174,6 +174,7 @@ func getThreadPost(w http.ResponseWriter, r *http.Request, db *sql.DB, store *se
   }
 
   //perform query and check for errors
+  //TODO: ignore norows error??
   rows, err := db.Query(dbQuery)
   if err != nil {
     panic(err)

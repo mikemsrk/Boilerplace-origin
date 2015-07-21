@@ -129,7 +129,7 @@
 
     });                     
 
-    $('#upvoteScore').click(function() {
+    $('#upvoteThreadScore').click(function() {
 
       var threadId = parseInt($('#threadId').val());
 
@@ -153,7 +153,7 @@
 
     });
 
-    $('#downvoteScore').click(function() {
+    $('#downvoteThreadScore').click(function() {
 
       var threadId = parseInt($('#threadId').val());
 
@@ -279,7 +279,55 @@
           }
       });
 
-    });       
+    });  
+
+    $('#upvotePostScore').click(function() {
+
+      var postId = parseInt($('#postId').val());
+
+      $('#postId').val('');
+
+      $.ajax({
+        type: 'POST',
+        url: 'http://127.0.0.1:8080/upvoteThreadPost',
+        data: JSON.stringify({"post_id" : postId}),
+        // contentType: "application/json",
+        // crossDomain: true,
+          success: function(data, textStatus, jqXHR) {
+            console.log(data);
+            // console.log('success');
+            //data - response from server
+          },
+          error: function (jqXHR, textStatus, errorThrown) {
+            console.log(errorThrown);
+          }
+      });
+
+    });
+
+    $('#downvotePostScore').click(function() {
+
+      var postId = parseInt($('#postId').val());
+
+      $('#postId').val('');
+
+      $.ajax({
+        type: 'POST',
+        url: 'http://127.0.0.1:8080/downvoteThreadPost',
+        data: JSON.stringify({"post_id" : postId}),
+        // contentType: "application/json",
+        // crossDomain: true,
+          success: function(data, textStatus, jqXHR) {
+            console.log(data);
+            // console.log('success');
+            //data - response from server
+          },
+          error: function (jqXHR, textStatus, errorThrown) {
+            console.log(errorThrown);
+          }
+      });
+
+    });             
 
 
   });
@@ -335,8 +383,8 @@ Thread Id: <input type="text" id="threadIdX" name="threadIdX" placeholder="Threa
 <br>
 
 Thread Id: <input type="text" id="threadId" name="threadId" placeholder="Thread Id"><br>
-<input id="upvoteScore" type="submit" value="Upvote Score"><br>
-<input id="downvoteScore" type="submit" value="Downvote Score"><br>
+<input id="upvoteThreadScore" type="submit" value="Upvote Thread Score"><br>
+<input id="downvoteThreadScore" type="submit" value="Downvote Thread Score"><br>
 
 <br>
 
@@ -351,6 +399,12 @@ Page Number: <input type="text" id="pageNumber1" name="pageNumber1" placeholder=
 <input id="getThreadPostsByUser" type="submit" value="Get Thread Posts By User"><br>
 <input id="getThreadPostsByRating" type="submit" value="Get Thread Posts By Rating"><br>
 <input id="getThreadPostsByDatetime" type="submit" value="Get Thread Posts By Datetime"><br>
+
+<br>
+
+Post Id: <input type="text" id="postId" name="postId" placeholder="Post Id"><br>
+<input id="upvotePostScore" type="submit" value="Upvote Post Score"><br>
+<input id="downvotePostScore" type="submit" value="Downvote Post Score"><br>
 
 <br>
 

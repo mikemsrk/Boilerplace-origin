@@ -275,7 +275,7 @@ func scoreForumThread(w http.ResponseWriter, r *http.Request, db *sql.DB, store 
   }
   //fmt.Println(string(body))
   
-  //parse the JSON string body to get the thread to update and the score to update the thread with
+  //parse the JSON string body to get the thread to update
   byt := body
   var dat map[string]interface{}
   if err := json.Unmarshal(byt, &dat); err != nil {
@@ -357,7 +357,7 @@ func scoreForumThread(w http.ResponseWriter, r *http.Request, db *sql.DB, store 
       }
 
       //update the forum thread by the score
-      stmt, err := db.Prepare("update forum_threads set rating=rating+? where thread_id=?")
+      stmt, err := db.Prepare("update forum_threads set rating = rating + ? where thread_id = ?")
       if err != nil {
         log.Fatal(err)
       }

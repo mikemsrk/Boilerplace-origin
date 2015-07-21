@@ -166,11 +166,11 @@ func getThreadPost(w http.ResponseWriter, r *http.Request, db *sql.DB, store *se
     //get the user from the cookie
     userid := session.Values["userid"].(int)
 
-    dbQuery = "select post_id, thread_id, thread_posts.user_id, contents, rating, forum_threads.creation_time, forum_threads.last_update_time, user_name from thread_posts inner join users on thread_posts.user_id = users.user_id where thread_posts.user_id = " + strconv.Itoa(userid) + " and thread_id = " + strconv.Itoa(thread_id) + " limit " + strconv.Itoa(limit) + " offset " + strconv.Itoa(offset)
+    dbQuery = "select post_id, thread_id, thread_posts.user_id, contents, rating, thread_posts.creation_time, thread_posts.last_update_time, user_name from thread_posts inner join users on thread_posts.user_id = users.user_id where thread_posts.user_id = " + strconv.Itoa(userid) + " and thread_id = " + strconv.Itoa(thread_id) + " limit " + strconv.Itoa(limit) + " offset " + strconv.Itoa(offset)
   } else if option == 1 { //find the most popular forum threads
-    dbQuery = "select post_id, thread_id, thread_posts.user_id, contents, rating, forum_threads.creation_time, forum_threads.last_update_time, user_name from thread_posts inner join users on thread_posts.user_id = users.user_id where thread_id = " + strconv.Itoa(thread_id) + " order by rating desc limit " + strconv.Itoa(limit) + " offset " + strconv.Itoa(offset)
+    dbQuery = "select post_id, thread_id, thread_posts.user_id, contents, rating, thread_posts.creation_time, thread_posts.last_update_time, user_name from thread_posts inner join users on thread_posts.user_id = users.user_id where thread_id = " + strconv.Itoa(thread_id) + " order by rating desc limit " + strconv.Itoa(limit) + " offset " + strconv.Itoa(offset)
   } else { //find the most recent forum threads
-    dbQuery = "select post_id, thread_id, thread_posts.user_id, contents, rating, forum_threads.creation_time, forum_threads.last_update_time, user_name from thread_posts inner join users on thread_posts.user_id = users.user_id where thread_id = " + strconv.Itoa(thread_id)  + " order by creation_time desc limit " + strconv.Itoa(limit) + " offset " + strconv.Itoa(offset)
+    dbQuery = "select post_id, thread_id, thread_posts.user_id, contents, rating, thread_posts.creation_time, thread_posts.last_update_time, user_name from thread_posts inner join users on thread_posts.user_id = users.user_id where thread_id = " + strconv.Itoa(thread_id)  + " order by creation_time desc limit " + strconv.Itoa(limit) + " offset " + strconv.Itoa(offset)
   }
 
   //perform query and check for errors
@@ -208,6 +208,153 @@ func getThreadPost(w http.ResponseWriter, r *http.Request, db *sql.DB, store *se
   //return 200 status to indicate success
   fmt.Println("about to write 200 header")
   w.Write(jsonString)
+
+}
+
+//TODO: Return correct status and message if session is invalid
+//TODO: Return correct status and message if query failed
+func scoreThreadPost(w http.ResponseWriter, r *http.Request, db *sql.DB, store *sessions.CookieStore, option int) {
+
+  fmt.Println("Score thread post...")
+
+  //add headers to response
+  w.Header()["access-control-allow-origin"] = []string{"http://localhost:8080"} //TODO: fix this?                                                           
+  w.Header()["access-control-allow-methods"] = []string{"GET, POST, OPTIONS"}
+  w.Header()["Content-Type"] = []string{"application/json"}
+
+  //ignore options requests
+  if r.Method == "OPTIONS" {
+    fmt.Println("options request received")
+    w.WriteHeader(http.StatusTemporaryRedirect)
+    return
+  }
+
+  //check for session to see if client is authenticated
+  session, err := store.Get(r, "flash-session")
+  if err != nil {
+    http.Error(w, err.Error(), http.StatusInternalServerError)
+  }
+  fm := session.Flashes("message")
+  if fm == nil {
+    fmt.Println("Trying to vote on forum thread post as an invalid user")
+    fmt.Fprint(w, "No flash messages")
+    return
+  }
+  //session.Save(r, w)
+
+  //get the user id and username from the cookie
+  userid := session.Values["userid"].(int)
+  //username := session.Values["username"].(string)  
+
+  //parse the body of the request into a string
+  body, err := ioutil.ReadAll(r.Body)
+  if err != nil {
+    panic(err)
+  }
+  //fmt.Println(string(body))
+  
+  //parse the JSON string body to get the thread post to update
+  byt := body
+  var dat map[string]interface{}
+  if err := json.Unmarshal(byt, &dat); err != nil {
+    panic(err)
+  }
+  post_id := int(dat["post_id"].(float64))
+
+  //variable(s) to hold the returned values from the query
+  var (
+    queried_score int
+  )
+
+  //query the post_votes table for the post id and user id
+  err = db.QueryRow("select score from post_votes where post_id = ? and user_id = ?", post_id, userid).Scan(&queried_score)
+  switch {
+
+    //if record doesn't exist   
+    case err == sql.ErrNoRows:
+      //insert a new row to indicate that the user has voted for the post
+      stmt, err := db.Prepare("insert into post_votes (post_id, user_id, score) values (?, ?, ?)")
+      if err != nil {
+        log.Fatal(err)
+      }
+      res, err := stmt.Exec(post_id, userid, option)
+      if err != nil {
+        log.Fatal(err)
+      }
+      fmt.Printf("Inserted record into post_votes table.\n")
+
+      //update the forum post by the score
+      stmt, err = db.Prepare("update thread_posts set rating = rating + ? where post_id = ?")
+      if err != nil {
+        log.Fatal(err)
+      }
+      res, err = stmt.Exec(option, post_id)
+      if err != nil {
+        log.Fatal(err)
+      }
+      rowCnt, err := res.RowsAffected()
+      if err != nil {
+        log.Fatal(err)
+      }
+      fmt.Printf("Updated score of thread post " + strconv.Itoa(post_id) + ". Rows affected = %d\n", rowCnt)      
+
+      //return 200 status to indicate success
+      fmt.Println("about to write 200 header")
+      w.WriteHeader(http.StatusOK)
+
+      break
+
+    //if error querying database  
+    case err != nil:
+      log.Fatal(err)
+      //return 400 status to indicate error
+      fmt.Println("about to write 400 header")
+      w.Write([]byte(fmt.Sprintf("Error querying database")))  
+      break
+
+    //if record exists
+    default:
+      if queried_score == -1 && option == 1 || queried_score == 0 && option == 1 || queried_score == 0 && option == -1  || queried_score == 1 && option == -1 {
+        //update post_votes table for the post id and user id
+        stmt, err := db.Prepare("update post_votes set score = ? where post_id = ? and user_id = ?")
+        if err != nil {
+          log.Fatal(err)
+        }
+        _, err = stmt.Exec(queried_score + option, post_id, userid)
+        if err != nil {
+          log.Fatal(err)
+        }
+        fmt.Printf("Updated record in post_votes table.\n")
+      } else
+      {
+        //return 400 status to indicate error
+        fmt.Println("about to write 400 header")
+        fmt.Println("Cannot upvote twice or downvote twice")     
+        w.Write([]byte(fmt.Sprintf("Cannot upvote twice or downvote twice")))   
+        return
+      }
+
+      //update the forum thread post by the score
+      stmt, err := db.Prepare("update thread_posts set rating = rating + ? where post_id = ?")
+      if err != nil {
+        log.Fatal(err)
+      }
+      res, err := stmt.Exec(option, post_id)
+      if err != nil {
+        log.Fatal(err)
+      }
+      rowCnt, err := res.RowsAffected()
+      if err != nil {
+        log.Fatal(err)
+      }
+      fmt.Printf("Updated score of thread post " + strconv.Itoa(post_id) + ". Rows affected = %d\n", rowCnt)
+
+      //return 200 status to indicate success
+      fmt.Println("about to write 200 header")
+      w.WriteHeader(http.StatusOK)
+      
+      break
+  }
 
 }
 

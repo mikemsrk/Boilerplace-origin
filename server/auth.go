@@ -254,16 +254,16 @@ func getUserInfoHandler(w http.ResponseWriter, r *http.Request, db *sql.DB, stor
     queried_avatar_link string
   )
 
-  //query the database for the user id
+  //query the database for the user info
   err = db.QueryRow("select first_name, last_name, bio, rep, avatar_link from users where user_id = ?", userid).Scan(&queried_first_name, &queried_last_name, &queried_bio, &queried_rep, &queried_avatar_link)
   switch {
 
-    //if user id doesn't exist   
+    //if user doesn't exist 
     case err == sql.ErrNoRows:
       //return 400 status to indicate error
       fmt.Println("about to write 400 header")
-      fmt.Println("User id cannot be found")     
-      w.Write([]byte(fmt.Sprintf("User id cannot be found"))) 
+      fmt.Println("User cannot be found")     
+      w.Write([]byte(fmt.Sprintf("User cannot be found"))) 
       break
 
     //if error querying database  
@@ -274,7 +274,7 @@ func getUserInfoHandler(w http.ResponseWriter, r *http.Request, db *sql.DB, stor
       w.Write([]byte(fmt.Sprintf("Error querying database")))  
       break
 
-    //if user id exists  
+    //if user exists
     default:
 
       //create outbound object

@@ -47,6 +47,7 @@ func main() {
 
   //TODO: make urls more RESTful
 
+
   //routes in auth.go
 
   //allow user to sign up
@@ -68,6 +69,7 @@ func main() {
   http.HandleFunc("/authenticate", func(w http.ResponseWriter, r *http.Request) {
     loginHandler(w, r, db, store)
   })
+
 
   //routes in forum_threads.go
 
@@ -106,16 +108,6 @@ func main() {
     scoreForumThread(w, r, db, store, -1)
   })
 
-  //upvote thread post
-  http.HandleFunc("/upvoteThreadPost", func(w http.ResponseWriter, r *http.Request) {
-    scoreThreadPost(w, r, db, store, 1)
-  })      
-
-  //downvote thread post
-  http.HandleFunc("/downvoteThreadPost", func(w http.ResponseWriter, r *http.Request) {
-    scoreThreadPost(w, r, db, store, -1)
-  })  
-
 
   //routes in thread_posts.go
 
@@ -139,6 +131,28 @@ func main() {
     getThreadPost(w, r, db, store, 2)
   })   
 
+  //upvote thread post
+  http.HandleFunc("/upvoteThreadPost", func(w http.ResponseWriter, r *http.Request) {
+    scoreThreadPost(w, r, db, store, 1)
+  })      
+
+  //downvote thread post
+  http.HandleFunc("/downvoteThreadPost", func(w http.ResponseWriter, r *http.Request) {
+    scoreThreadPost(w, r, db, store, -1)
+  })  
+
+
+  //routes in users.go
+
+  //get user info by user id
+  http.HandleFunc("/getUserInfoByUserId", func(w http.ResponseWriter, r *http.Request) {
+    getUserInfo(w, r, db, 0)
+  })
+
+  //get user info by username
+  http.HandleFunc("/getUserInfoByUsername", func(w http.ResponseWriter, r *http.Request) {
+    getUserInfo(w, r, db, 1)
+  })
 
 
   //routes for sockets

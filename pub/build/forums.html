@@ -327,18 +327,62 @@
           }
       });
 
-    });             
+    });           
+
+    $('#getUserInfoByUserId').click(function() {
+
+      var userId = parseInt($('#userId').val());
+
+      $('#userId').val('');
+
+      $.ajax({
+        type: 'POST',
+        url: 'http://127.0.0.1:8080/getUserInfoByUserId',
+        data: JSON.stringify({"user_id" : userId}),
+        // contentType: "application/json",
+        // crossDomain: true,
+          success: function(data, textStatus, jqXHR) {
+            console.log(data);
+            // console.log('success');
+            //data - response from server
+          },
+          error: function (jqXHR, textStatus, errorThrown) {
+            console.log(errorThrown);
+          }
+      });
+
+    });       
+
+    $('#getUserInfoByUsername').click(function() {
+
+      var username = $('#username').val();
+
+      $('#username').val('');
+
+      $.ajax({
+        type: 'POST',
+        url: 'http://127.0.0.1:8080/getUserInfoByUsername',
+        data: JSON.stringify({"user_name" : username}),
+        // contentType: "application/json",
+        // crossDomain: true,
+          success: function(data, textStatus, jqXHR) {
+            console.log(data);
+            // console.log('success');
+            //data - response from server
+          },
+          error: function (jqXHR, textStatus, errorThrown) {
+            console.log(errorThrown);
+          }
+      });
+
+    });      
 
 
   });
 </script>
 <style type="text/css">
-html {
-    overflow: hidden;
-}
 
 body {
-    overflow: hidden;
     padding: 0;
     margin: 0;
     width: 100%;
@@ -353,7 +397,6 @@ body {
     bottom: 1em;
     left: 0px;
     width: 100%;
-    overflow: hidden;
 }
 
 </style>
@@ -361,6 +404,16 @@ body {
 <body>
     
 <a href="home.html">Home</a><br>
+
+<br>
+
+User Id: <input type="text" id="userId" name="userId" placeholder="User Id"><br>
+<input id="getUserInfoByUserId" type="submit" value="Get User Info By User Id"><br>
+
+<br>
+
+Username: <input type="text" id="username" name="username" placeholder="Username"><br>
+<input id="getUserInfoByUsername" type="submit" value="Get User Info by Username"><br>
 
 <br>
 
@@ -405,6 +458,10 @@ Page Number: <input type="text" id="pageNumber1" name="pageNumber1" placeholder=
 Post Id: <input type="text" id="postId" name="postId" placeholder="Post Id"><br>
 <input id="upvotePostScore" type="submit" value="Upvote Post Score"><br>
 <input id="downvotePostScore" type="submit" value="Downvote Post Score"><br>
+
+<br>
+
+
 
 <br>
 

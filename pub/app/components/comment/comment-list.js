@@ -44,12 +44,13 @@ var CommentList = React.createClass({
 
   upVote: function(id){
     // TODO: call Comment action to upvote
-    // CommentActions.vote({comment_id:id,score:1});
+    console.log('upvoting...',id);
+    CommentActions.upVote({post_id:id});
   },
 
   downVote: function(id){
     // TODO: call Comment action to downvote
-    // CommentActions.vote({comment_id:id,score:-1});
+    CommentActions.downVote({post_id:id});
   },
 
   render: function() {

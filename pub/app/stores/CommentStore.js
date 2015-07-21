@@ -52,9 +52,16 @@ var CommentStore = assign({}, EventEmitter.prototype, {
     });
   },
 
-  vote: function(Comment_id,score){
+  upVote: function(post_id){
     var that = this;
-    Comment.vote(Comment_id,score,function(data){
+    Comment.upVote(post_id,function(data){
+      that.emitChange();
+    });
+  },
+
+  downVote: function(post_id){
+    var that = this;
+    Comment.downVote(post_id,function(data){
       that.emitChange();
     });
   },
@@ -103,10 +110,12 @@ AppDispatcher.register(function(payload){
       break;
     case CommentConstants.POST_DELETE:
       // TODO: Deleting a Comment
-
       break;
-    case CommentConstants.POST_VOTE:
-      CommentStore.vote(action.data.Comment_id,action.data.score);
+    case CommentConstants.POST_UPVOTE:
+      CommentStore.upVote(action.data.post_id);
+      break;
+    case CommentConstants.POST_DOWNVOTE:
+      CommentStore.downVote(action.data.post_id);
       break;
 
     default:

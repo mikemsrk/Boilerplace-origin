@@ -31,9 +31,16 @@ var CommentActions = {
     });
   },
   // Rate a Comment up or down
-  vote: function(data){
+  upVote: function(data){
     AppDispatcher.handleAction({
-      actionType: CommentConstants.POST_VOTE,
+      actionType: CommentConstants.POST_UPVOTE,
+      data: data
+    });
+  },
+
+  downVote: function(data){
+    AppDispatcher.handleAction({
+      actionType: CommentConstants.POST_DOWNVOTE,
       data: data
     });
   }

@@ -26,15 +26,17 @@ var formatBody = function(str){
 //  Thread comment item
 var CommentItem = React.createClass({
 
-  upVote: function(){
-    this.props.onUpVote(this.props.item.comment_id);
+  upVote: function(e){
+    e.preventDefault();
+    this.props.onUpVote(this.props.item.post_id);
     React.findDOMNode(this.refs.up).className = '';
     React.findDOMNode(this.refs.down).className="glyphicon glyphicon-chevron-down"
     this.props.item.rating++;
   },
 
-  downVote: function(){
-    this.props.onDownVote(this.props.item.comment_id);
+  downVote: function(e){
+    e.preventDefault();
+    this.props.onDownVote(this.props.item.post_id);
     React.findDOMNode(this.refs.down).className = '';
     React.findDOMNode(this.refs.up).className = "glyphicon glyphicon-chevron-up";
     this.props.item.rating--;

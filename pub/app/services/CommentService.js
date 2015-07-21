@@ -110,12 +110,33 @@ var updateComment = function(bio,avatar,callback) {
   });
 };
 
-var vote = function(comment_id, score, callback) {
-  
+var upVote = function(post_id, callback) {
+  console.log('upvoting...',post_id);
   $.ajax({
     type: 'POST',
-    url: '/scoreForumComment',
-    data: JSON.stringify({"comment_id" : comment_id, "score" : score}),
+    url: '/upvoteThreadPost',
+    data: JSON.stringify({"post_id" : parseInt(post_id)}),
+    crossDomain: true,
+    success: function(resp) { // WORKING for fetchuser?
+      // console.log('success',resp);
+      callback(resp);
+    },
+    error: function(resp) {
+      // TODO: Fix this, this always goes to error - not sure.
+      // Found out - jQuery 1.4.2 works with current go server, but breaks with newer ver.
+      console.log('error',resp);
+      callback(null);
+    }
+  });
+
+};
+
+var downVote = function(post_id, callback) {
+  console.log('downvoting...',post_id);
+  $.ajax({
+    type: 'POST',
+    url: '/downvoteThreadPost',
+    data: JSON.stringify({"post_id" : parseInt(post_id)}),
     crossDomain: true,
     success: function(resp) { // WORKING for fetchuser?
       // console.log('success',resp);
@@ -182,10 +203,10 @@ var Comment = {
     this.onChange(false);
   },
 
-  vote: function(Comment_id,score,callback){
+  upVote: function(post_id,callback){
     var that = this;
 
-    vote(Comment_id, score, function(res) {
+    upVote(post_id, function(res) {
       if (callback) {
         callback(res);
       }
@@ -193,6 +214,19 @@ var Comment = {
     });
 
   },
+
+  downVote: function(post_id,callback){
+    var that = this;
+
+    downVote(post_id, function(res) {
+      if (callback) {
+        callback(res);
+      }
+      that.onChange(res);
+    });
+
+  },
+
 
   onChange: function() {}
 };

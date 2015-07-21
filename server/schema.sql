@@ -35,6 +35,18 @@ CREATE TABLE forum_threads (
   FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
 
+CREATE TABLE thread_votes (
+  thread_id INT(10),
+  user_id INT(10),
+  score TINYINT(1) DEFAULT 0,
+  creation_time DATETIME DEFAULT CURRENT_TIMESTAMP,
+  last_update_time DATETIME ON UPDATE CURRENT_TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+  PRIMARY KEY (thread_id, user_id),
+  FOREIGN KEY (thread_id) REFERENCES forum_threads(thread_id),
+  FOREIGN KEY (user_id) REFERENCES users(user_id)
+);
+
 CREATE TABLE thread_posts (
   post_id INT(10) NOT NULL auto_increment,
   thread_id INT(10),
@@ -49,15 +61,17 @@ CREATE TABLE thread_posts (
   FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
 
-CREATE TABLE thread_votes (
-  thread_id INT(10),
+CREATE TABLE post_votes (
+  post_id INT(10),
   user_id INT(10),
   score TINYINT(1) DEFAULT 0,
   creation_time DATETIME DEFAULT CURRENT_TIMESTAMP,
   last_update_time DATETIME ON UPDATE CURRENT_TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
-  PRIMARY KEY (thread_id, user_id),
-  FOREIGN KEY (thread_id) REFERENCES forum_threads(thread_id),
+  PRIMARY KEY (post_id, user_id),
+  FOREIGN KEY (post_id) REFERENCES thread_posts(post_id),
   FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
+
+
 

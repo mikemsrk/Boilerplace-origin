@@ -106,6 +106,16 @@ func main() {
     scoreForumThread(w, r, db, store, -1)
   })
 
+  //upvote thread post
+  http.HandleFunc("/upvoteThreadPost", func(w http.ResponseWriter, r *http.Request) {
+    scoreThreadPost(w, r, db, store, 1)
+  })      
+
+  //downvote thread post
+  http.HandleFunc("/downvoteThreadPost", func(w http.ResponseWriter, r *http.Request) {
+    scoreThreadPost(w, r, db, store, -1)
+  })  
+
 
   //routes in thread_posts.go
 

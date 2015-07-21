@@ -134,17 +134,12 @@ func getForumThread(w http.ResponseWriter, r *http.Request, db *sql.DB, store *s
   }
   //fmt.Println(string(body))
   
-  //parse the JSON string body to get the page number
+  //parse the JSON string body
   byt := body
   var dat map[string]interface{}
   if err := json.Unmarshal(byt, &dat); err != nil {
     panic(err)
   }
-  page_number := int(dat["page_number"].(float64))
-
-  //only get 25 threads per query, and get records based on page number
-  limit := 25
-  offset := (page_number - 1) * limit
 
   //variable(s) to hold the returned values from the query
   var (
@@ -165,15 +160,38 @@ func getForumThread(w http.ResponseWriter, r *http.Request, db *sql.DB, store *s
     //get the user from the cookie
     userid := session.Values["userid"].(int)
 
-    dbQuery = "select thread_id, forum_threads.user_id, title, body, post_count, rating, creation_time, last_update_time, user_name from forum_threads inner join users on forum_threads.user_id = users.user_id where forum_threads.user_id = " + strconv.Itoa(userid) + " limit " + strconv.Itoa(limit) + " offset " + strconv.Itoa(offset)
+    //get the page number from the JSON message
+    page_number := int(dat["page_number"].(float64))
+
+    //only get 25 threads per query, and get records based on page number
+    limit := 25
+    offset := (page_number - 1) * limit
+    
+
+    dbQuery = "select thread_id, forum_threads.user_id, title, body, post_count, rating, forum_threads.creation_time, forum_threads.last_update_time, user_name from forum_threads inner join users on forum_threads.user_id = users.user_id where forum_threads.user_id = " + strconv.Itoa(userid) + " limit " + strconv.Itoa(limit) + " offset " + strconv.Itoa(offset)
   } else if option == 1 { //find the most popular forum threads
-    dbQuery = "select thread_id, forum_threads.user_id, title, body, post_count, rating, creation_time, last_update_time, user_name from forum_threads inner join users on forum_threads.user_id = users.user_id order by rating desc limit " + strconv.Itoa(limit) + " offset " + strconv.Itoa(offset)
+    //get the page number from the JSON message
+    page_number := int(dat["page_number"].(float64))
+
+    //only get 25 threads per query, and get records based on page number
+    limit := 25
+    offset := (page_number - 1) * limit
+
+    dbQuery = "select thread_id, forum_threads.user_id, title, body, post_count, rating, forum_threads.creation_time, forum_threads.last_update_time, user_name from forum_threads inner join users on forum_threads.user_id = users.user_id order by rating desc limit " + strconv.Itoa(limit) + " offset " + strconv.Itoa(offset)
   } else if option == 2 { //find the most recent forum threads
-    dbQuery = "select thread_id, forum_threads.user_id, title, body, post_count, rating, creation_time, last_update_time, user_name from forum_threads inner join users on forum_threads.user_id = users.user_id order by creation_time desc limit " + strconv.Itoa(limit) + " offset " + strconv.Itoa(offset)
-  } else {
+    //get the page number from the JSON message
+    page_number := int(dat["page_number"].(float64))
+
+    //only get 25 threads per query, and get records based on page number
+    limit := 25
+    offset := (page_number - 1) * limit
+
+    dbQuery = "select thread_id, forum_threads.user_id, title, body, post_count, rating, forum_threads.creation_time, forum_threads.last_update_time, user_name from forum_threads inner join users on forum_threads.user_id = users.user_id order by creation_time desc limit " + strconv.Itoa(limit) + " offset " + strconv.Itoa(offset)
+  } else { //find forum thread by the thread id
+    //get the thread id from the JSON message
     thread_id := int(dat["thread_id"].(float64))
-    fmt.Println(dat["thread_id"])
-    dbQuery = "select thread_id, forum_threads.user_id, title, body, post_count, rating, creation_time, last_update_time, user_name from forum_threads inner join users on forum_threads.user_id = users.user_id where thread_id = " + strconv.Itoa(thread_id) + " limit " + strconv.Itoa(limit) + " offset " + strconv.Itoa(offset)
+
+    dbQuery = "select thread_id, forum_threads.user_id, title, body, post_count, rating, forum_threads.creation_time, forum_threads.last_update_time, user_name from forum_threads inner join users on forum_threads.user_id = users.user_id where thread_id = " + strconv.Itoa(thread_id)
   }
 
   //perform query and check for errors
@@ -217,7 +235,7 @@ func getForumThread(w http.ResponseWriter, r *http.Request, db *sql.DB, store *s
 
 //TODO: Return correct status and message if session is invalid
 //TODO: Return correct status and message if query failed
-func scoreForumThread(w http.ResponseWriter, r *http.Request, db *sql.DB, store *sessions.CookieStore) {
+func scoreForumThread(w http.ResponseWriter, r *http.Request, db *sql.DB, store *sessions.CookieStore, option int) {
 
   fmt.Println("Score forum thread...")
 
@@ -246,6 +264,10 @@ func scoreForumThread(w http.ResponseWriter, r *http.Request, db *sql.DB, store 
   }
   //session.Save(r, w)
 
+  //get the user id and username from the cookie
+  userid := session.Values["userid"].(int)
+  //username := session.Values["username"].(string)  
+
   //parse the body of the request into a string
   body, err := ioutil.ReadAll(r.Body)
   if err != nil {
@@ -259,27 +281,102 @@ func scoreForumThread(w http.ResponseWriter, r *http.Request, db *sql.DB, store 
   if err := json.Unmarshal(byt, &dat); err != nil {
     panic(err)
   }
-  score := int(dat["score"].(float64))
   thread_id := int(dat["thread_id"].(float64))
 
-  //update the forum thread by the score
-  stmt, err := db.Prepare("update forum_threads set rating=rating+? where thread_id=?")
-  if err != nil {
-    log.Fatal(err)
-  }
-  res, err := stmt.Exec(score, thread_id)
-  if err != nil {
-    log.Fatal(err)
-  }
-  rowCnt, err := res.RowsAffected()
-  if err != nil {
-    log.Fatal(err)
-  }
-  fmt.Printf("Updated score of thread " + strconv.Itoa(thread_id) + ". Rows affected = %d\n", rowCnt)
+  //variable(s) to hold the returned values from the query
+  var (
+    queried_score int
+  )
 
-  //return 200 status to indicate success
-  fmt.Println("about to write 200 header")
-  w.WriteHeader(http.StatusOK)
+  //query the thread_votes table for the thread id and user id
+  err = db.QueryRow("select score from thread_votes where thread_id = ? and user_id = ?", thread_id, userid).Scan(&queried_score)
+  switch {
+
+    //if record doesn't exist   
+    case err == sql.ErrNoRows:
+      //insert a new row to indicate that the user has voted for the thread
+      stmt, err := db.Prepare("insert into thread_votes (thread_id, user_id, score) values (?, ?, ?)")
+      if err != nil {
+        log.Fatal(err)
+      }
+      res, err := stmt.Exec(thread_id, userid, option)
+      if err != nil {
+        log.Fatal(err)
+      }
+      fmt.Printf("Inserted record into thread_votes table.\n")
+
+      //update the forum thread by the score
+      stmt, err = db.Prepare("update forum_threads set rating = rating + ? where thread_id = ?")
+      if err != nil {
+        log.Fatal(err)
+      }
+      res, err = stmt.Exec(option, thread_id)
+      if err != nil {
+        log.Fatal(err)
+      }
+      rowCnt, err := res.RowsAffected()
+      if err != nil {
+        log.Fatal(err)
+      }
+      fmt.Printf("Updated score of thread " + strconv.Itoa(thread_id) + ". Rows affected = %d\n", rowCnt)      
+
+      //return 200 status to indicate success
+      fmt.Println("about to write 200 header")
+      w.WriteHeader(http.StatusOK)
+
+      break
+
+    //if error querying database  
+    case err != nil:
+      log.Fatal(err)
+      //return 400 status to indicate error
+      fmt.Println("about to write 400 header")
+      w.Write([]byte(fmt.Sprintf("Error querying database")))  
+      break
+
+    //if record exists
+    default:
+      if queried_score == -1 && option == 1 || queried_score == 0 && option == 1 || queried_score == 0 && option == -1  || queried_score == 1 && option == -1 {
+        //update thread_votes table for the thread id and user id
+        stmt, err := db.Prepare("update thread_votes set score = ? where thread_id = ? and user_id = ?")
+        if err != nil {
+          log.Fatal(err)
+        }
+        _, err = stmt.Exec(queried_score + option, thread_id, userid)
+        if err != nil {
+          log.Fatal(err)
+        }
+        fmt.Printf("Updated record in thread_votes table.\n")
+      } else
+      {
+        //return 400 status to indicate error
+        fmt.Println("about to write 400 header")
+        fmt.Println("Cannot upvote twice or downvote twice")     
+        w.Write([]byte(fmt.Sprintf("Cannot upvote twice or downvote twice")))   
+        return
+      }
+
+      //update the forum thread by the score
+      stmt, err := db.Prepare("update forum_threads set rating=rating+? where thread_id=?")
+      if err != nil {
+        log.Fatal(err)
+      }
+      res, err := stmt.Exec(option, thread_id)
+      if err != nil {
+        log.Fatal(err)
+      }
+      rowCnt, err := res.RowsAffected()
+      if err != nil {
+        log.Fatal(err)
+      }
+      fmt.Printf("Updated score of thread " + strconv.Itoa(thread_id) + ". Rows affected = %d\n", rowCnt)
+
+      //return 200 status to indicate success
+      fmt.Println("about to write 200 header")
+      w.WriteHeader(http.StatusOK)
+      
+      break
+  }
 
 }
 

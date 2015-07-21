@@ -166,11 +166,11 @@ func getThreadPost(w http.ResponseWriter, r *http.Request, db *sql.DB, store *se
     //get the user from the cookie
     userid := session.Values["userid"].(int)
 
-    dbQuery = "select post_id, thread_id, thread_posts.user_id, contents, rating, creation_time, last_update_time, user_name from thread_posts inner join users on thread_posts.user_id = users.user_id where thread_posts.user_id = " + strconv.Itoa(userid) + " and thread_id = " + strconv.Itoa(thread_id) + " limit " + strconv.Itoa(limit) + " offset " + strconv.Itoa(offset)
+    dbQuery = "select post_id, thread_id, thread_posts.user_id, contents, rating, forum_threads.creation_time, forum_threads.last_update_time, user_name from thread_posts inner join users on thread_posts.user_id = users.user_id where thread_posts.user_id = " + strconv.Itoa(userid) + " and thread_id = " + strconv.Itoa(thread_id) + " limit " + strconv.Itoa(limit) + " offset " + strconv.Itoa(offset)
   } else if option == 1 { //find the most popular forum threads
-    dbQuery = "select post_id, thread_id, thread_posts.user_id, contents, rating, creation_time, last_update_time, user_name from thread_posts inner join users on thread_posts.user_id = users.user_id where thread_id = " + strconv.Itoa(thread_id) + " order by rating desc limit " + strconv.Itoa(limit) + " offset " + strconv.Itoa(offset)
+    dbQuery = "select post_id, thread_id, thread_posts.user_id, contents, rating, forum_threads.creation_time, forum_threads.last_update_time, user_name from thread_posts inner join users on thread_posts.user_id = users.user_id where thread_id = " + strconv.Itoa(thread_id) + " order by rating desc limit " + strconv.Itoa(limit) + " offset " + strconv.Itoa(offset)
   } else { //find the most recent forum threads
-    dbQuery = "select post_id, thread_id, thread_posts.user_id, contents, rating, creation_time, last_update_time, user_name from thread_posts inner join users on thread_posts.user_id = users.user_id where thread_id = " + strconv.Itoa(thread_id)  + " order by creation_time desc limit " + strconv.Itoa(limit) + " offset " + strconv.Itoa(offset)
+    dbQuery = "select post_id, thread_id, thread_posts.user_id, contents, rating, forum_threads.creation_time, forum_threads.last_update_time, user_name from thread_posts inner join users on thread_posts.user_id = users.user_id where thread_id = " + strconv.Itoa(thread_id)  + " order by creation_time desc limit " + strconv.Itoa(limit) + " offset " + strconv.Itoa(offset)
   }
 
   //perform query and check for errors

@@ -96,17 +96,16 @@ func main() {
     getForumThread(w, r, db, store, 3)
   })   
 
-  //score forum thread
-  http.HandleFunc("/scoreForumThread", func(w http.ResponseWriter, r *http.Request) {
-    scoreForumThread(w, r, db, store)
+  //upvote forum thread
+  http.HandleFunc("/upvoteForumThread", func(w http.ResponseWriter, r *http.Request) {
+    scoreForumThread(w, r, db, store, 1)
   })      
 
-/*
   //downvote forum thread
   http.HandleFunc("/downvoteForumThread", func(w http.ResponseWriter, r *http.Request) {
-    dow(w, r, db, store)
+    scoreForumThread(w, r, db, store, -1)
   })
-*/
+
 
   //routes in thread_posts.go
 

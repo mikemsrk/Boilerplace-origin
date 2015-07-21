@@ -189,7 +189,7 @@ func updateUserInfoHandler(w http.ResponseWriter, r *http.Request, db *sql.DB, s
   avatar_link := dat["avatar_link"].(string)
 
   //update user's bio and avatar_link
-  stmt, err := db.Prepare("update users set bio=?, avatar_link=? where user_id=?")
+  stmt, err := db.Prepare("update users set bio = ?, avatar_link = ? where user_id = ?")
   if err != nil {
     log.Fatal(err)
   }

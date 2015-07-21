@@ -14,6 +14,8 @@ CREATE TABLE users (
   bio VARCHAR(500) DEFAULT '',
   rep INT(10) DEFAULT 0,
   avatar_link VARCHAR(200) DEFAULT '',
+  creation_time DATETIME DEFAULT CURRENT_TIMESTAMP,
+  last_update_time DATETIME ON UPDATE CURRENT_TIMESTAMP DEFAULT CURRENT_TIMESTAMP,  
 
   PRIMARY KEY (user_id),
   UNIQUE KEY (user_name)
@@ -43,6 +45,18 @@ CREATE TABLE thread_posts (
   last_update_time DATETIME ON UPDATE CURRENT_TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
   PRIMARY KEY (post_id),
+  FOREIGN KEY (thread_id) REFERENCES forum_threads(thread_id),
+  FOREIGN KEY (user_id) REFERENCES users(user_id)
+);
+
+CREATE TABLE thread_votes (
+  thread_id INT(10),
+  user_id INT(10),
+  score TINYINT(1) DEFAULT 0,
+  creation_time DATETIME DEFAULT CURRENT_TIMESTAMP,
+  last_update_time DATETIME ON UPDATE CURRENT_TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+  PRIMARY KEY (thread_id, user_id),
   FOREIGN KEY (thread_id) REFERENCES forum_threads(thread_id),
   FOREIGN KEY (user_id) REFERENCES users(user_id)
 );

@@ -91,6 +91,11 @@ func main() {
     getForumThread(w, r, db, store, 2)
   })   
 
+  //get forum threads by thread id
+  http.HandleFunc("/getForumThreadsByThreadId", func(w http.ResponseWriter, r *http.Request) {
+    getForumThread(w, r, db, store, 3)
+  })   
+
   //score forum thread
   http.HandleFunc("/scoreForumThread", func(w http.ResponseWriter, r *http.Request) {
     scoreForumThread(w, r, db, store)

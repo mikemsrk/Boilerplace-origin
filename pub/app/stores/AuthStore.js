@@ -6,7 +6,7 @@ var assign = require('object-assign');
 
 var CHANGE_EVENT = 'change';
 
-var _user = null;
+var _user = {username:'user'};
 var _loggedIn = null;
 var _error = null;
 
@@ -15,6 +15,10 @@ var AuthStore = assign({}, EventEmitter.prototype, {
   emitChange: function() {
      this.emit(CHANGE_EVENT);
    },
+
+  getUser: function(){
+    return _user;
+  },
 
   error: function(){
     return _error;
@@ -27,6 +31,7 @@ var AuthStore = assign({}, EventEmitter.prototype, {
 
       if(success){
         _loggedIn = true;
+        _user = {username: username};
       }else{
         _loggedIn = false;
         _error = true;

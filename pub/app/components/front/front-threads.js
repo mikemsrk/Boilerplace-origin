@@ -10,7 +10,8 @@ var Threads = React.createClass({
   getInitialState: function(){
     return {
       page: 1,
-      threads: []
+      threads: [],
+      alert: false
     };
   },
 
@@ -44,41 +45,29 @@ var Threads = React.createClass({
     console.log('transitioning to...thread',id);
   },
 
+  showAlert: function(){
+    this.props.onAlert();
+  },
+
   render: function() {
     return (
       <div className="threads">
-        
-          <h3>Front Page</h3>
-          <table className="table table-hover">
-            <thead>
-              <tr>
-                <th>Rating</th>
-                <th>Title</th>
-                <th>Body</th>
-                <th>Submitted</th>
-                <th>Created</th>
-                <th>Updated</th>
-              </tr>
-            </thead>
-
-            <tbody>
-              {
-                this.state.threads.map(function(item){
-                  return (
-                    <ThreadItem 
-                      ref = "thread" 
-                      onGoThread = {this.goThread} 
-                      onUpVote = {this.upVote} 
-                      onDownVote = {this.downVote} 
-                      key = {item.thread_id} 
-                      item = {item} />
-                  );
-                },this)
-              }
-            </tbody>
-
-          </table>
-          
+        <p className="showing">showing {this.state.threads.length} threads out of {this.state.threads.length} </p>
+          {
+            this.state.threads.map(function(item){
+              return (
+                <ThreadItem 
+                  ref = "thread"
+                  onAlert = {this.showAlert}
+                  loggedIn = {this.props.loggedIn}
+                  onGoThread = {this.goThread} 
+                  onUpVote = {this.upVote} 
+                  onDownVote = {this.downVote} 
+                  key = {item.thread_id} 
+                  item = {item} />
+              );
+            },this)
+          }
       </div>
     );
   }

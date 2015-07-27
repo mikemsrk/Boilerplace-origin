@@ -7,7 +7,8 @@ var Front = React.createClass({
 
   getInitialState: function(){
     return {
-      loggedIn: AuthStore.loggedIn()
+      loggedIn: AuthStore.loggedIn(),
+      alert: false
     };
   },
 
@@ -21,17 +22,28 @@ var Front = React.createClass({
 
   _onChange: function(){
     this.setState({
-      loggedIn: AuthStore.loggedIn()
+      loggedIn: AuthStore.loggedIn(),
+      alert: false
+    });
+  },
+
+  showAlert: function(){
+    this.setState({
+      alert: true
     });
   },
 
   render: function() {
     return (
       <div className="col-md-12"> 
-        {this.state.loggedIn ? (
-        <Link className="btn btn-info" to="/new">New</Link>
-        ): null }
-        <Threads />
+        {this.state.alert ? (
+          <div className="alert alert-danger">
+            <strong>Please Log in</strong> to use this feature.
+          </div>
+          ):(
+          null
+        )}
+        <Threads onAlert={this.showAlert}loggedIn={this.state.loggedIn}/>
       </div>
     );
   }
